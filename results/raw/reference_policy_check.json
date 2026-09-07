@@ -1,0 +1,202 @@
+[
+  {
+    "case_id": "01-passrole-runinstances",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 2,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"FleetMonitoring\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"ec2:DescribeInstances\"\n      ],\n      \"Resource\": \"*\"\n    },\n    {\n      \"Sid\": \"BatchWorkerControl\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"ec2:StartInstances\",\n        \"ec2:StopInstances\"\n      ],\n      \"Resource\": \"arn:aws:ec2:us-east-1:123456789012:instance/i-0123456789abcdef0\"\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "02-createpolicyversion",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 1,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AuditReadOnlyPolicyInspection\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetPolicy\",\n        \"iam:GetPolicyVersion\",\n        \"iam:ListPolicyVersions\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy\"\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "03-passrole-lambda",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 2,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"TargetFunctionDeploymentOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"lambda:GetFunction\",\n        \"lambda:UpdateFunctionCode\"\n      ],\n      \"Resource\": \"arn:aws:lambda:us-east-1:123456789012:function:invoice-processor\"\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "04-attachuserpolicy",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 1,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"DirectorySyncReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetUser\",\n        \"iam:ListUsers\",\n        \"iam:ListAttachedUserPolicies\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "05-createaccesskey",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 2,
+      "passed_must_allow": 4
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"SelfKeyRotationOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetUser\",\n        \"iam:ListAccessKeys\",\n        \"iam:CreateAccessKey\",\n        \"iam:DeleteAccessKey\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:user/app-worker\"\n    }\n  ]\n}\n"
+    }
+  },
+  {
+    "case_id": "06-updateassumerolepolicy",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 2,
+      "passed_must_allow": 1
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AssumeSpecificStagingRoleOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"sts:AssumeRole\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:role/app-staging-deployer\"\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "07-setdefaultpolicyversion",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 1,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"PolicyInventoryReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetPolicy\",\n        \"iam:GetPolicyVersion\",\n        \"iam:ListPolicyVersions\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:policy/EngineeringPolicy\"\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "08-s3-wildcard",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 3,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"StaticAssetsBucketListing\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:ListBucket\"\n      ],\n      \"Resource\": \"arn:aws:s3:::app-static-assets-prod\"\n    },\n    {\n      \"Sid\": \"StaticAssetsObjectReadWrite\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:GetObject\",\n        \"s3:PutObject\"\n      ],\n      \"Resource\": \"arn:aws:s3:::app-static-assets-prod/*\"\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "09-gcp-actas-cloudfunctions",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 2,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/cloudfunctions.viewer\",\n      \"members\": [\n        \"user:ops-analyst@example.com\"\n      ]\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "10-gcp-set-iampolicy",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 1,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/viewer\",\n      \"members\": [\n        \"serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}"
+    }
+  }
+]

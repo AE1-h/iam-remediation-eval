@@ -1,0 +1,202 @@
+[
+  {
+    "case_id": "01-passrole-runinstances",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "02-createpolicyversion",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "03-passrole-lambda",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "04-attachuserpolicy",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "05-createaccesskey",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "06-updateassumerolepolicy",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "07-setdefaultpolicyversion",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "08-s3-wildcard",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "09-gcp-actas-cloudfunctions",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "10-gcp-set-iampolicy",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  }
+]

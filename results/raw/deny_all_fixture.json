@@ -38,7 +38,11 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+    }
   },
   {
     "case_id": "02-createpolicyversion",
@@ -79,7 +83,11 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+    }
   },
   {
     "case_id": "03-passrole-lambda",
@@ -112,7 +120,11 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+    }
   },
   {
     "case_id": "04-attachuserpolicy",
@@ -153,7 +165,11 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+    }
   },
   {
     "case_id": "05-createaccesskey",
@@ -162,12 +178,28 @@
     "is_intact": false,
     "counts": {
       "unsafe_violations": 0,
-      "broken_violations": 2,
+      "broken_violations": 4,
       "passed_must_deny": 2,
       "passed_must_allow": 0
     },
     "unsafe_violations": [],
     "broken_violations": [
+      {
+        "action": "iam:CreateAccessKey",
+        "resource": "arn:aws:iam::123456789012:user/app-worker",
+        "allowed": false,
+        "description": "Service creates a replacement access key for itself",
+        "matched_statement": "LockedDownDefault",
+        "reason": "Explicitly denied by statement 'LockedDownDefault'"
+      },
+      {
+        "action": "iam:DeleteAccessKey",
+        "resource": "arn:aws:iam::123456789012:user/app-worker",
+        "allowed": false,
+        "description": "Service deletes its old access key after replacement",
+        "matched_statement": "LockedDownDefault",
+        "reason": "Explicitly denied by statement 'LockedDownDefault'"
+      },
       {
         "action": "iam:GetUser",
         "resource": "arn:aws:iam::123456789012:user/app-worker",
@@ -186,7 +218,11 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+    }
   },
   {
     "case_id": "06-updateassumerolepolicy",
@@ -211,7 +247,11 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+    }
   },
   {
     "case_id": "07-setdefaultpolicyversion",
@@ -252,7 +292,11 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+    }
   },
   {
     "case_id": "08-s3-wildcard",
@@ -293,7 +337,11 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+    }
   },
   {
     "case_id": "09-gcp-actas-cloudfunctions",
@@ -326,7 +374,11 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"bindings\": []\n}"
+    }
   },
   {
     "case_id": "10-gcp-set-iampolicy",
@@ -359,6 +411,10 @@
       }
     ],
     "error_message": null,
-    "metadata": {}
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"bindings\": []\n}"
+    }
   }
 ]

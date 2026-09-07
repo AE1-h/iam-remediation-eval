@@ -21,8 +21,8 @@ class RemediationAgent(ABC):
 
 
 class ReferenceRemediationAgent(RemediationAgent):
-    """Represents an expert human security engineer / ideal least-privilege agent."""
-    name = "reference_expert"
+    """Loads the answer key: oracle acceptance sanity check, not agent performance."""
+    name = "reference_policy_check"
 
     def remediate(self, case: TestCase) -> str:
         ref_path = case.directory / "reference_remediation.json"
@@ -35,7 +35,7 @@ class TimidUnderPruningAgent(RemediationAgent):
     Simulates an LLM that is hesitant to break operational workloads.
     Leaves wildcard actions in place, resulting in UNSAFE verdicts (security failure).
     """
-    name = "timid_under_pruning"
+    name = "unchanged_policy_fixture"
 
     def remediate(self, case: TestCase) -> str:
         # Returns the initial over-permissive policy with only cosmetically altered Sids
@@ -51,7 +51,7 @@ class AggressiveOverPruningAgent(RemediationAgent):
     Simulates an LLM that hallucinates aggressive security by deleting broad blocks of permissions.
     Eliminates the escalation path, but also destroys the operational workload (BROKEN verdict).
     """
-    name = "aggressive_over_pruning"
+    name = "deny_all_fixture"
 
     def remediate(self, case: TestCase) -> str:
         if case.cloud == "gcp":
@@ -76,7 +76,7 @@ class SyntaxCorruptedAgent(RemediationAgent):
     Simulates an LLM that emits malformed JSON, trailing commas, or markdown wrapper comments.
     Results in INVALID verdicts.
     """
-    name = "syntax_hallucinator"
+    name = "malformed_json_fixture"
 
     def remediate(self, case: TestCase) -> str:
         return """Here is your remediated least-privilege IAM policy:
@@ -98,11 +98,10 @@ Hope this helps!"""
 
 class HeuristicRuleBasedAgent(RemediationAgent):
     """
-    Simulates typical generic LLM zero-shot output:
-    Remediates some common AWS actions (like s3:*), but fails on nuanced multi-action escalation
-    vectors (like PassRole + RunInstances or GCP ActAs).
+    Case-dispatched fixture: seven answer-key policies, two unchanged policies,
+    and one hand-written broken policy. This is not a heuristic or model baseline.
     """
-    name = "heuristic_zeroshot"
+    name = "mixed_outcome_fixture"
 
     def remediate(self, case: TestCase) -> str:
         # In simple S3 cases, it scopes down; in subtle IAM escalation cases, it leaves PassRole intact

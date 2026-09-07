@@ -1,5 +1,11 @@
 {
   "metadata": {
+    "evaluation_kind": "scripted_oracle_self_test",
+    "llm_calls": 0,
+    "answer_key_access": [
+      "reference_policy_check",
+      "mixed_outcome_fixture"
+    ],
     "total_cases": 10,
     "cloud_breakdown": {
       "aws": 8,
@@ -7,7 +13,14 @@
     }
   },
   "agents": {
-    "reference_expert": {
+    "reference_policy_check": {
+      "matrix_counts": {
+        "safe_intact": 10,
+        "safe_broken": 0,
+        "unsafe_intact": 0,
+        "unsafe_broken": 0,
+        "not_evaluated": 0
+      },
       "counts": {
         "correct": 10,
         "unsafe": 0,
@@ -37,7 +50,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"FleetMonitoring\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"ec2:DescribeInstances\"\n      ],\n      \"Resource\": \"*\"\n    },\n    {\n      \"Sid\": \"BatchWorkerControl\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"ec2:StartInstances\",\n        \"ec2:StopInstances\"\n      ],\n      \"Resource\": \"arn:aws:ec2:us-east-1:123456789012:instance/i-0123456789abcdef0\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "02-createpolicyversion",
@@ -53,7 +70,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AuditReadOnlyPolicyInspection\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetPolicy\",\n        \"iam:GetPolicyVersion\",\n        \"iam:ListPolicyVersions\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "03-passrole-lambda",
@@ -69,7 +90,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"TargetFunctionDeploymentOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"lambda:GetFunction\",\n        \"lambda:UpdateFunctionCode\"\n      ],\n      \"Resource\": \"arn:aws:lambda:us-east-1:123456789012:function:invoice-processor\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "04-attachuserpolicy",
@@ -85,7 +110,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"DirectorySyncReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetUser\",\n        \"iam:ListUsers\",\n        \"iam:ListAttachedUserPolicies\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "05-createaccesskey",
@@ -96,12 +125,16 @@
             "unsafe_violations": 0,
             "broken_violations": 0,
             "passed_must_deny": 2,
-            "passed_must_allow": 2
+            "passed_must_allow": 4
           },
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"SelfKeyRotationOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetUser\",\n        \"iam:ListAccessKeys\",\n        \"iam:CreateAccessKey\",\n        \"iam:DeleteAccessKey\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:user/app-worker\"\n    }\n  ]\n}\n"
+          }
         },
         {
           "case_id": "06-updateassumerolepolicy",
@@ -117,7 +150,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AssumeSpecificStagingRoleOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"sts:AssumeRole\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:role/app-staging-deployer\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "07-setdefaultpolicyversion",
@@ -133,7 +170,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"PolicyInventoryReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetPolicy\",\n        \"iam:GetPolicyVersion\",\n        \"iam:ListPolicyVersions\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:policy/EngineeringPolicy\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "08-s3-wildcard",
@@ -149,7 +190,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"StaticAssetsBucketListing\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:ListBucket\"\n      ],\n      \"Resource\": \"arn:aws:s3:::app-static-assets-prod\"\n    },\n    {\n      \"Sid\": \"StaticAssetsObjectReadWrite\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:GetObject\",\n        \"s3:PutObject\"\n      ],\n      \"Resource\": \"arn:aws:s3:::app-static-assets-prod/*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "09-gcp-actas-cloudfunctions",
@@ -165,7 +210,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/cloudfunctions.viewer\",\n      \"members\": [\n        \"user:ops-analyst@example.com\"\n      ]\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "10-gcp-set-iampolicy",
@@ -181,11 +230,22 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "reference_policy_check",
+            "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/viewer\",\n      \"members\": [\n        \"serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}"
+          }
         }
       ]
     },
-    "timid_under_pruning": {
+    "unchanged_policy_fixture": {
+      "matrix_counts": {
+        "safe_intact": 0,
+        "safe_broken": 0,
+        "unsafe_intact": 10,
+        "unsafe_broken": 0,
+        "not_evaluated": 0
+      },
       "counts": {
         "correct": 0,
         "unsafe": 10,
@@ -232,7 +292,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated_OverlyPermissiveEC2AndPassRole\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"ec2:DescribeInstances\",\n        \"ec2:StartInstances\",\n        \"ec2:StopInstances\",\n        \"ec2:RunInstances\",\n        \"iam:PassRole\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "02-createpolicyversion",
@@ -257,7 +321,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated_AuditAndPolicyAdmin\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetPolicy\",\n        \"iam:GetPolicyVersion\",\n        \"iam:ListPolicyVersions\",\n        \"iam:CreatePolicyVersion\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "03-passrole-lambda",
@@ -290,7 +358,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated_LambdaDeployerBroadAccess\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"lambda:GetFunction\",\n        \"lambda:UpdateFunctionCode\",\n        \"lambda:CreateFunction\",\n        \"iam:PassRole\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "04-attachuserpolicy",
@@ -315,7 +387,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated_DirectorySyncService\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetUser\",\n        \"iam:ListUsers\",\n        \"iam:ListAttachedUserPolicies\",\n        \"iam:AttachUserPolicy\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "05-createaccesskey",
@@ -326,7 +402,7 @@
             "unsafe_violations": 2,
             "broken_violations": 0,
             "passed_must_deny": 0,
-            "passed_must_allow": 2
+            "passed_must_allow": 4
           },
           "unsafe_violations": [
             {
@@ -348,7 +424,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated_UnscopedAccessKeyManager\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:CreateAccessKey\",\n        \"iam:DeleteAccessKey\",\n        \"iam:ListAccessKeys\",\n        \"iam:GetUser\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:user/*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "06-updateassumerolepolicy",
@@ -381,7 +461,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated_DeploymentRoleRunner\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"sts:AssumeRole\",\n        \"iam:UpdateAssumeRolePolicy\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "07-setdefaultpolicyversion",
@@ -406,7 +490,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated_PolicyInventoryCollector\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetPolicy\",\n        \"iam:GetPolicyVersion\",\n        \"iam:ListPolicyVersions\",\n        \"iam:SetDefaultPolicyVersion\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "08-s3-wildcard",
@@ -447,7 +535,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated_OverlyBroadS3Access\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:*\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "09-gcp-actas-cloudfunctions",
@@ -480,7 +572,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/editor\",\n      \"members\": [\n        \"user:ops-analyst@example.com\"\n      ]\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "10-gcp-set-iampolicy",
@@ -505,11 +601,22 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "unchanged_policy_fixture",
+            "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/resourcemanager.projectIamAdmin\",\n      \"members\": [\n        \"serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}"
+          }
         }
       ]
     },
-    "aggressive_over_pruning": {
+    "deny_all_fixture": {
+      "matrix_counts": {
+        "safe_intact": 0,
+        "safe_broken": 10,
+        "unsafe_intact": 0,
+        "unsafe_broken": 0,
+        "not_evaluated": 0
+      },
       "counts": {
         "correct": 0,
         "unsafe": 0,
@@ -564,7 +671,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "02-createpolicyversion",
@@ -605,7 +716,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "03-passrole-lambda",
@@ -638,7 +753,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "04-attachuserpolicy",
@@ -679,7 +798,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "05-createaccesskey",
@@ -688,12 +811,28 @@
           "is_intact": false,
           "counts": {
             "unsafe_violations": 0,
-            "broken_violations": 2,
+            "broken_violations": 4,
             "passed_must_deny": 2,
             "passed_must_allow": 0
           },
           "unsafe_violations": [],
           "broken_violations": [
+            {
+              "action": "iam:CreateAccessKey",
+              "resource": "arn:aws:iam::123456789012:user/app-worker",
+              "allowed": false,
+              "description": "Service creates a replacement access key for itself",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "iam:DeleteAccessKey",
+              "resource": "arn:aws:iam::123456789012:user/app-worker",
+              "allowed": false,
+              "description": "Service deletes its old access key after replacement",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
             {
               "action": "iam:GetUser",
               "resource": "arn:aws:iam::123456789012:user/app-worker",
@@ -712,7 +851,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "06-updateassumerolepolicy",
@@ -737,7 +880,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "07-setdefaultpolicyversion",
@@ -778,7 +925,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "08-s3-wildcard",
@@ -819,7 +970,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LockedDownDefault\",\n      \"Effect\": \"Deny\",\n      \"Action\": \"*\",\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "09-gcp-actas-cloudfunctions",
@@ -852,7 +1007,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"bindings\": []\n}"
+          }
         },
         {
           "case_id": "10-gcp-set-iampolicy",
@@ -885,11 +1044,22 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "deny_all_fixture",
+            "proposed_policy": "{\n  \"bindings\": []\n}"
+          }
         }
       ]
     },
-    "heuristic_zeroshot": {
+    "mixed_outcome_fixture": {
+      "matrix_counts": {
+        "safe_intact": 7,
+        "safe_broken": 1,
+        "unsafe_intact": 2,
+        "unsafe_broken": 0,
+        "not_evaluated": 0
+      },
       "counts": {
         "correct": 7,
         "unsafe": 2,
@@ -936,7 +1106,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"OverlyPermissiveEC2AndPassRole\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"ec2:DescribeInstances\",\n        \"ec2:StartInstances\",\n        \"ec2:StopInstances\",\n        \"ec2:RunInstances\",\n        \"iam:PassRole\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "02-createpolicyversion",
@@ -969,7 +1143,11 @@
             }
           ],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AuditReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetPolicy\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "03-passrole-lambda",
@@ -1002,7 +1180,11 @@
           ],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"LambdaDeployerBroadAccess\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"lambda:GetFunction\",\n        \"lambda:UpdateFunctionCode\",\n        \"lambda:CreateFunction\",\n        \"iam:PassRole\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "04-attachuserpolicy",
@@ -1018,7 +1200,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"DirectorySyncReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetUser\",\n        \"iam:ListUsers\",\n        \"iam:ListAttachedUserPolicies\"\n      ],\n      \"Resource\": \"*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "05-createaccesskey",
@@ -1029,12 +1215,16 @@
             "unsafe_violations": 0,
             "broken_violations": 0,
             "passed_must_deny": 2,
-            "passed_must_allow": 2
+            "passed_must_allow": 4
           },
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"SelfKeyRotationOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetUser\",\n        \"iam:ListAccessKeys\",\n        \"iam:CreateAccessKey\",\n        \"iam:DeleteAccessKey\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:user/app-worker\"\n    }\n  ]\n}\n"
+          }
         },
         {
           "case_id": "06-updateassumerolepolicy",
@@ -1050,7 +1240,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"AssumeSpecificStagingRoleOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"sts:AssumeRole\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:role/app-staging-deployer\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "07-setdefaultpolicyversion",
@@ -1066,7 +1260,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"PolicyInventoryReadOnly\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"iam:GetPolicy\",\n        \"iam:GetPolicyVersion\",\n        \"iam:ListPolicyVersions\"\n      ],\n      \"Resource\": \"arn:aws:iam::123456789012:policy/EngineeringPolicy\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "08-s3-wildcard",
@@ -1082,7 +1280,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"StaticAssetsBucketListing\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:ListBucket\"\n      ],\n      \"Resource\": \"arn:aws:s3:::app-static-assets-prod\"\n    },\n    {\n      \"Sid\": \"StaticAssetsObjectReadWrite\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\n        \"s3:GetObject\",\n        \"s3:PutObject\"\n      ],\n      \"Resource\": \"arn:aws:s3:::app-static-assets-prod/*\"\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "09-gcp-actas-cloudfunctions",
@@ -1098,7 +1300,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/cloudfunctions.viewer\",\n      \"members\": [\n        \"user:ops-analyst@example.com\"\n      ]\n    }\n  ]\n}"
+          }
         },
         {
           "case_id": "10-gcp-set-iampolicy",
@@ -1114,11 +1320,22 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": null,
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "mixed_outcome_fixture",
+            "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/viewer\",\n      \"members\": [\n        \"serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}"
+          }
         }
       ]
     },
-    "syntax_hallucinator": {
+    "malformed_json_fixture": {
+      "matrix_counts": {
+        "safe_intact": 0,
+        "safe_broken": 0,
+        "unsafe_intact": 0,
+        "unsafe_broken": 0,
+        "not_evaluated": 10
+      },
       "counts": {
         "correct": 0,
         "unsafe": 0,
@@ -1148,7 +1365,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         },
         {
           "case_id": "02-createpolicyversion",
@@ -1164,7 +1385,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         },
         {
           "case_id": "03-passrole-lambda",
@@ -1180,7 +1405,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         },
         {
           "case_id": "04-attachuserpolicy",
@@ -1196,7 +1425,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         },
         {
           "case_id": "05-createaccesskey",
@@ -1212,7 +1445,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         },
         {
           "case_id": "06-updateassumerolepolicy",
@@ -1228,7 +1465,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         },
         {
           "case_id": "07-setdefaultpolicyversion",
@@ -1244,7 +1485,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         },
         {
           "case_id": "08-s3-wildcard",
@@ -1260,7 +1505,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         },
         {
           "case_id": "09-gcp-actas-cloudfunctions",
@@ -1276,7 +1525,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         },
         {
           "case_id": "10-gcp-set-iampolicy",
@@ -1292,7 +1545,11 @@
           "unsafe_violations": [],
           "broken_violations": [],
           "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
-          "metadata": {}
+          "metadata": {
+            "source_kind": "scripted_self_test",
+            "fixture": "malformed_json_fixture",
+            "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+          }
         }
       ]
     }

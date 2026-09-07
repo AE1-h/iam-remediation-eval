@@ -1,17 +1,21 @@
-# Deterministic IAM Remediation Evaluation Report
+# Scripted Oracle Self-Test Report
 
-Evaluation of 5 distinct remediation agent archetypes across 10 hand-written, real-world IAM privilege escalation cases.
+5 hand-written fixtures across 10 cases. No LLM calls or LLM performance results.
 
-| Agent Archetype | Correct | Unsafe (Security Fail) | Broken (Ops Fail) | Invalid (Schema Fail) | Safe Rate | Intact Rate |
+The reference check loads the answer key. The mixed fixture also loads it for seven cases. These rows test evaluator behavior only.
+
+| Scripted Fixture | Correct | Unsafe | Broken | Invalid / Unsupported | Safe Rate | Intact Rate |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| `reference_expert` | **10** (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 100% | 100% |
-| `timid_under_pruning` | **0** (0%) | 10 (100%) | 0 (0%) | 0 (0%) | 0% | 100% |
-| `aggressive_over_pruning` | **0** (0%) | 0 (0%) | 10 (100%) | 0 (0%) | 100% | 0% |
-| `heuristic_zeroshot` | **7** (70%) | 2 (20%) | 1 (10%) | 0 (0%) | 80% | 90% |
-| `syntax_hallucinator` | **0** (0%) | 0 (0%) | 0 (0%) | 10 (100%) | 0% | 0% |
+| `reference_policy_check` | **10** (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 100% | 100% |
+| `unchanged_policy_fixture` | **0** (0%) | 10 (100%) | 0 (0%) | 0 (0%) | 0% | 100% |
+| `deny_all_fixture` | **0** (0%) | 0 (0%) | 10 (100%) | 0 (0%) | 100% | 0% |
+| `mixed_outcome_fixture` | **7** (70%) | 2 (20%) | 1 (10%) | 0 (0%) | 80% | 90% |
+| `malformed_json_fixture` | **0** (0%) | 0 (0%) | 0 (0%) | 10 (100%) | 0% | 0% |
 
 ### Verdict Definitions
-- **Correct**: The policy blocked all tested privilege escalation vectors AND preserved all permissions strictly needed by the legitimate workload.
-- **Unsafe**: The policy left open one or more privilege escalation paths (Security Failure).
-- **Broken**: The policy revoked permissions required by the operational workload to function (Operations Failure).
-- **Invalid**: The policy output was not parseable as valid JSON or violated standard IAM policy schemas.
+
+- **Correct**: All prohibited requests were denied and all specified workload requests were allowed within the supported policy model.
+- **Unsafe**: At least one prohibited request was allowed. This does not prove a complete attack chain is executable.
+- **Broken**: Safe on tested requests, but at least one workload check failed. Unsafe-and-broken policies have verdict unsafe; both flags remain in JSON.
+- **Invalid**: Malformed input or semantics outside the oracle's supported subset. Safety and integrity were not assessed; false flags are placeholders. Matrix counts exclude invalid results.
+- Rates use all cases as the denominator; invalid cases count as neither safe nor intact.

@@ -1,241 +1,121 @@
 # iam-remediation-eval
 
-Deterministic evaluation oracle and benchmark measuring safety and operational integrity when language models rewrite over-permissive IAM policies to least privilege.
+An offline IAM remediation evaluator that checks two separate questions: does a proposed policy block the prohibited requests, and does it preserve the specified workload?
 
-> Ten hand-written policy cases, evaluated against a deterministic oracle rather than a second model. Results describe these cases only and are not a general benchmark. Built as a student project to test whether LLM-generated IAM remediation can be trusted without a human in the loop.
+**No LLM performance results are published in this repository.** The committed results are deterministic self-tests using five hand-written fixtures, including policies read directly from the answer key. A separate command adapter can record actual model outputs for future evaluation.
 
----
+This student project contains ten hand-written AWS/GCP cases and a deliberately limited policy evaluator. Passing means satisfying these finite assertions within that model; it does not prove production safety, complete least privilege, or a working cloud workload.
 
-## The Evaluation Problem
+## Safety and workload integrity
 
-When an automated agent rewrites an IAM policy, it can fail in two opposite directions:
+| | Workload intact | Workload broken |
+| --- | --- | --- |
+| Tested requests blocked | CORRECT | BROKEN |
+| A prohibited request allowed | UNSAFE | UNSAFE, with `is_intact=false` |
 
-```
-                          OPERATIONAL INTEGRITY
-                     Preserved             Broken
-                +-------------------+-------------------+
-        Safe    |      CORRECT      |      BROKEN       |
-                |  (Target State)   | (Operations Fail) |
-SECURITY        +-------------------+-------------------+
-                |      UNSAFE       | UNSAFE & BROKEN   |
-       Unsafe   |  (Security Fail)  |  (Total Failure)  |
-                +-------------------+-------------------+
-```
+`must_deny.json` and `must_allow.json` are evaluated independently. Both sets of failures are retained. The single verdict gives UNSAFE priority when both dimensions fail. Malformed or unsupported policies return INVALID before grading; their false flags are placeholders for unassessed dimensions, and they are excluded from the matrix counts.
 
-1. **Unsafe (Security Failure)**: The rewritten policy still permits an escalation path. The prompt asked for least privilege, but dangerous wildcard combinations or subtle multi-action vectors survived.
-2. **Broken (Operations Failure)**: The rewritten policy blocks actions that the legitimate workload needs to run. This is the primary reason automated IAM remediation is rejected by production platform teams.
-3. **Invalid (Schema Failure)**: The output cannot be parsed as valid JSON or violates basic IAM statement structures.
+Each `must_deny` request is prohibited individually. These assertions do **not** execute or model the conjunction of steps in an attack chain. A policy that removes one step but retains another may therefore be marked unsafe even when that particular chain is no longer executable.
 
-Evaluating LLM remediations with another LLM introduces stochastic drift and shared blind spots. This project replaces model-based grading with a **deterministic oracle**: pure set logic over normalized statements, resource ARNs, and request conditions evaluated against static ground-truth assertions.
-
----
-
-## System Architecture
-
-```mermaid
-flowchart TD
-    subgraph Input["Input Ground Truth"]
-        P["Over-permissive Policy (policy.json)"]
-        W["Workload Description"]
-        D["Escalation Tests (must_deny.json)"]
-        A["Workload Tests (must_allow.json)"]
-    end
-
-    subgraph Agent["Remediation Candidate"]
-        LLM["Remediation Agent / LLM"]
-        P --> LLM
-        W --> LLM
-        LLM --> PROP["Proposed Policy (JSON)"]
-    end
-
-    subgraph Oracle["Deterministic Evaluation Oracle"]
-        SYN["Schema & JSON Validator"]
-        NORM["Statement Normalizer"]
-        DENY_EVAL["must_deny Vector Evaluation"]
-        ALLOW_EVAL["must_allow Vector Evaluation"]
-        VDEC["Verdict Decision Logic"]
-
-        PROP --> SYN
-        SYN -- Valid --> NORM
-        SYN -- Invalid --> V_INV["INVALID"]
-        NORM --> DENY_EVAL
-        NORM --> ALLOW_EVAL
-        D --> DENY_EVAL
-        A --> ALLOW_EVAL
-
-        DENY_EVAL --> VDEC
-        ALLOW_EVAL --> VDEC
-
-        VDEC --> V_UNSAFE["UNSAFE (Escalation Path Permitted)"]
-        VDEC --> V_BROKEN["BROKEN (Legitimate Workload Pruned)"]
-        VDEC --> V_CORRECT["CORRECT (Safe & Intact)"]
-    end
-```
-
----
-
-## Oracle Evaluation Logic
-
-The oracle implements exact policy evaluation semantics for AWS IAM and GCP IAM:
-
-```mermaid
-flowchart TD
-    Start(["Action / Resource / Context Check"]) --> ParseCheck{"Matches Explicit Deny Statement?"}
-    ParseCheck -- Yes --> Denied(["DENIED (Explicit Deny Overrides All)"])
-    ParseCheck -- No --> MatchAllow{"Matches Allow Statement?"}
-    
-    MatchAllow -- No --> DefDeny(["DENIED (Default Implicit Deny)"])
-    MatchAllow -- Yes --> CondCheck{"Satisfies Condition Block?"}
-    
-    CondCheck -- No --> DefDeny
-    CondCheck -- Yes --> Allowed(["ALLOWED"])
-```
-
-For each proposed remediation:
-- **Security Check**: The oracle checks every attack vector in `must_deny.json`. If *any* check evaluates to `ALLOWED`, `is_safe = False`.
-- **Operations Check**: The oracle checks every legitimate action in `must_allow.json`. If *any* check fails to evaluate to `ALLOWED`, `is_intact = False`.
-
----
-
-## Proving the Instrument: Mutation Testing
-
-Before trusting evaluation numbers, the oracle itself must be verified. A test suite that passes on a defective evaluator gives false confidence.
-
-This repository subjects the oracle to mutation testing: deliberate flaws are injected into the evaluation engine, and the test suite must catch and kill every single mutant.
+## Current architecture
 
 ```mermaid
 flowchart LR
-    O["Oracle Engine"] --> MUT["Inject Mutator Flaw"]
-    MUT --> M1["Invert Deny Precedence"]
-    MUT --> M2["Drop Condition Checks"]
-    MUT --> M3["Drop Default Deny"]
-    MUT --> M4["Invert must_deny Logic"]
-    MUT --> M5["Wildcard Resource Leaks"]
-    MUT --> M6["Case Sensitivity Flaw"]
-    
-    M1 & M2 & M3 & M4 & M5 & M6 --> SUITE["Run Verification Probe Suite"]
-    SUITE --> RESULT{"Mutant Detected?"}
-    RESULT -- Yes --> KILLED["KILLED (100% Target)"]
-    RESULT -- No --> SURVIVED["SURVIVED (Test Suite Defect)"]
+    F["Scripted fixtures: current committed self-tests"] --> P["Candidate policy"]
+    M["External model command: optional, no published runs"] --> P
+    P --> V["Validate supported policy subset"]
+    V -->|unsupported or malformed| I["INVALID: unassessed"]
+    V -->|supported| O["Independent must_deny and must_allow checks"]
+    O --> R["Verdict, both flags, request failures"]
 ```
 
-Run mutation testing with:
+For supported AWS statements, action, resource, and condition must all match. A matching explicit Deny overrides matching Allows, in either statement order. Without a matching Allow, the request is denied.
+
+## Supported subset and refusal boundaries
+
+- AWS identity-policy statements: `Sid`, `Effect`, `Action`, `Resource`, `Condition`. Actions ignore case; resources preserve case. Wildcards support `*` and `?`; brackets are literal. Empty statement lists represent deny-all fixtures.
+- Conditions: exactly `StringEquals`, `StringLike`, `StringNotEquals`, `ArnEquals`, and `ArnLike`. Condition keys ignore case; values preserve case. Multiple expected positive values use OR; `StringNotEquals` uses NOR. A missing key fails positive comparisons and satisfies `StringNotEquals`. Multiple keys/operators use AND. ARN comparisons support wildcards.
+- Request condition values must be scalar strings. Set qualifiers, `IfExists`, policy variables, `Bool`, IP/numeric/date operators and all other operators return INVALID. Malformed condition blocks also return INVALID, even on statements that would not match a request. The direct condition helper raises `ValueError`.
+- `Principal`, `NotPrincipal`, `NotAction`, `NotResource`, and unknown policy fields are rejected rather than ignored. This validator checks the supported structure, not all AWS service-specific policy rules.
+- GCP supports the eight role names in `GCP_ROLE_PERMISSIONS` and explicit `user:` / `serviceAccount:` members. Unknown roles, conditional bindings, groups, public principals and wildcard members return INVALID. Every request needs an explicit member. Permissions are case sensitive.
+
+The condition contract follows [AWS condition operators](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html) and [multiple-value logic](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-logic-multiple-context-keys-or-values.html) for the subset above.
+
+## Cases
+
+| Case | Prohibited capability | Preserved workload |
+| --- | --- | --- |
+| [01](cases/01-passrole-runinstances) | PassRole / RunInstances | Existing fleet inspection and start/stop |
+| [02](cases/02-createpolicyversion) | CreatePolicyVersion | Policy compliance inspection |
+| [03](cases/03-passrole-lambda) | PassRole / CreateFunction | Update an existing function's code |
+| [04](cases/04-attachuserpolicy) | AttachUserPolicy | Directory enumeration |
+| [05](cases/05-createaccesskey) | Other users' access-key management | Create/delete and inspect own keys |
+| [06](cases/06-updateassumerolepolicy) | Trust-policy modification | Assume a designated staging role |
+| [07](cases/07-setdefaultpolicyversion) | SetDefaultPolicyVersion | Policy inventory |
+| [08](cases/08-s3-wildcard) | Unscoped S3 access | Read/write designated assets |
+| [09](cases/09-gcp-actas-cloudfunctions) | ActAs / function creation | Function inspection |
+| [10](cases/10-gcp-set-iampolicy) | Project IAM policy modification | Project IAM inspection |
+
+Each directory contains the original policy, positive/negative requests, a reference remediation, and notes. The references are known-good **for these checks**, not independently certified policies. Case 05 includes self-key creation/deletion checks; the earlier version tested only inspection despite describing rotation.
+
+## Scripted oracle self-tests
+
+See [the generated report](results/report.md), [structured results](results/self_test_eval.json), and [per-fixture artifacts](results/raw). Every artifact records fixture provenance and the candidate policy text. No model is called.
+
+| Fixture | Construction | Expected purpose |
+| --- | --- | --- |
+| `reference_policy_check` | Reads `reference_remediation.json` | Answer-key acceptance sanity check |
+| `unchanged_policy_fixture` | Returns original permissions | Unsafe classification check |
+| `deny_all_fixture` | Removes all access | Workload failure check |
+| `malformed_json_fixture` | Emits fixed malformed text | Parse failure check |
+| `mixed_outcome_fixture` | Seven answer-key policies, two originals, one broken policy | Mixed report aggregation check |
+
+The old names `reference_expert` and `heuristic_zeroshot` implied capabilities these fixtures do not have. Their scores were never evidence about experts, heuristics, or language models.
+
+## Verification and mutation testing
+
+Python 3.9+ and the standard library are sufficient. CI runs Python 3.9–3.13.
 
 ```bash
+python3 -m unittest discover tests -v
 python3 scripts/run_mutations.py
-```
-
-Current mutation score: **6/6 (100.0% killed)**.
-
----
-
-## Benchmark Cases
-
-Ten hand-written privilege escalation vectors based on published cloud security research:
-
-| Case ID | Cloud | Escalation Mechanism | Legitimate Workload Scope | Primary Citation |
-| :--- | :---: | :--- | :--- | :--- |
-| `01-passrole-runinstances` | AWS | `iam:PassRole` + `ec2:RunInstances` via metadata credentials | Fleet status and start/stop controls | Rhino Security Labs (Method 1) |
-| `02-createpolicyversion` | AWS | `iam:CreatePolicyVersion` with `--set-as-default` | Read-only compliance policy audit | Rhino Security Labs (Method 2) |
-| `03-passrole-lambda` | AWS | `iam:PassRole` + `lambda:CreateFunction` with admin role | CI/CD bundle update on target function | Rhino Security Labs (Method 4) |
-| `04-attachuserpolicy` | AWS | `iam:AttachUserPolicy` attaching `AdministratorAccess` | Directory sync user enumeration | Rhino Security Labs (Method 6) |
-| `05-createaccesskey` | AWS | `iam:CreateAccessKey` without self-scoping conditions | User credential self-rotation | Rhino Security Labs (Method 7) |
-| `06-updateassumerolepolicy` | AWS | `iam:UpdateAssumeRolePolicy` poisoning trust relationships | Assuming specific staging deployment role | Rhino Security Labs (Method 9) |
-| `07-setdefaultpolicyversion` | AWS | `iam:SetDefaultPolicyVersion` reverting to older permissive version | Read-only policy inventory collector | Rhino Security Labs (Method 3) |
-| `08-s3-wildcard` | AWS | Global wildcard `s3:*` on `*` permitting vault exfiltration | Asset bucket upload and download | CIS AWS Benchmark 2.1 |
-| `09-gcp-actas-cloudfunctions` | GCP | `iam.serviceAccounts.actAs` + `cloudfunctions.functions.create` | Function configuration viewer | Bishop Fox GCP Escalation |
-| `10-gcp-set-iampolicy` | GCP | `resourcemanager.projects.setIamPolicy` granting `roles/owner` | Compliance scanner IAM viewer | Rhino Security Labs GCP |
-
-Each case directory contains:
-- `policy.json`: The over-permissive baseline policy.
-- `must_deny.json`: Exact action and resource combinations constituting the escalation path.
-- `must_allow.json`: Exact action, resource, and condition combinations the workload genuinely needs.
-- `NOTES.md`: Attack mechanics, legitimate requirements, and technical citations.
-- `reference_remediation.json`: Ground-truth least-privilege policy that satisfies all constraints.
-
----
-
-## Baseline Evaluation Results
-
-Evaluation of 5 distinct agent archetypes across all 10 benchmark cases:
-
-| Agent Archetype | Correct | Unsafe (Security Fail) | Broken (Ops Fail) | Invalid (Schema Fail) | Safe Rate | Intact Rate |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| `reference_expert` | **10** (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 100% | 100% |
-| `heuristic_zeroshot` | **7** (70%) | 2 (20%) | 1 (10%) | 0 (0%) | 80% | 90% |
-| `timid_under_pruning` | **0** (0%) | 10 (100%) | 0 (0%) | 0 (0%) | 0% | 100% |
-| `aggressive_over_pruning` | **0** (0%) | 0 (0%) | 10 (100%) | 0 (0%) | 100% | 0% |
-| `syntax_hallucinator` | **0** (0%) | 0 (0%) | 0 (0%) | 10 (100%) | 0% | 0% |
-
-- Raw outputs and per-case breakdowns are committed in `results/raw/` and `results/baseline_eval.json`.
-
----
-
-## Repository Structure
-
-```
-.
-├── cases/                          # 10 hand-written benchmark test cases
-│   ├── 01-passrole-runinstances/
-│   │   ├── policy.json             # Over-permissive input
-│   │   ├── must_deny.json          # Prohibited escalation actions
-│   │   ├── must_allow.json         # Required operational actions
-│   │   ├── reference_remediation.json
-│   │   └── NOTES.md                # Mechanics and citations
-│   └── ... (02 through 10)
-├── oracle/                         # Deterministic evaluation engine (no models)
-│   ├── evaluator.py                # Set-logic policy evaluator
-│   ├── models.py                   # IAM policy and test case definitions
-│   └── verdict.py                  # Verdict models (Correct, Unsafe, Broken, Invalid)
-├── runner/                         # Remediation runners and mock agents
-│   ├── prompt.py                   # Standardized prompts
-│   ├── mock_agent.py               # Deterministic strategy models
-│   └── evaluate_batch.py           # Benchmark execution engine
-├── mutation/                       # Oracle mutation testing engine
-│   ├── mutators.py                 # Engine mutator definitions
-│   └── runner.py                   # Mutation test execution and scoring
-├── results/                        # Committed benchmark runs
-│   ├── baseline_eval.json          # Structured results
-│   ├── report.md                   # Formatted summary
-│   └── raw/                        # Per-agent raw evaluations
-├── scripts/                        # Operational CLI tools
-│   ├── validate_repo.py            # Master repository verification audit
-│   ├── run_oracle.py               # Single policy evaluation CLI
-│   └── run_mutations.py            # Mutation runner CLI
-├── tests/                          # Unit and integration test suite
-│   ├── test_oracle.py              # Evaluator logic tests
-│   ├── test_cases.py               # Case schema and baseline tests
-│   └── test_mutation.py            # Mutation survival assertion tests
-├── .github/workflows/ci.yml        # CI matrix: Python 3.10-3.13
-├── pyproject.toml
-└── LICENSE
-```
-
----
-
-## Reproduction and Local Verification
-
-All dependencies are standard library Python 3.9+. No external packages or live cloud credentials are required.
-
-```bash
-# 1. Run the test suite (unit tests, case schemas, and mutation assertions)
-python3 -m unittest discover tests
-
-# 2. Run the mutation testing suite directly
-python3 scripts/run_mutations.py
-
-# 3. Validate every claim and file digest across the repository
 python3 scripts/validate_repo.py
-
-# 4. Evaluate any proposed policy against a specific benchmark case
-python3 scripts/run_oracle.py --case 01-passrole-runinstances --policy cases/01-passrole-runinstances/policy.json
-python3 scripts/run_oracle.py --case 01-passrole-runinstances --policy cases/01-passrole-runinstances/reference_remediation.json
+python3 scripts/run_self_tests.py
+python3 scripts/run_oracle.py --case 01-passrole-runinstances --policy cases/01-passrole-runinstances/reference_remediation.json --json
 ```
 
----
+Validation recomputes and compares **all** committed self-test JSON, raw records, and the Markdown report. It does not rewrite them. To intentionally regenerate after a change:
+
+```bash
+python3 scripts/run_self_tests.py --write
+```
+
+The mutation harness applies 12 single-site source mutations in isolated namespaces: Deny precedence, conditions, default deny, safety aggregation, resource scoping, action case, wildcard expansion, literal brackets, unsupported operator dispatch, negated values, GCP role expansion, and member scoping. Every mutation site must exist exactly once; stale sites and crashing mutants fail the audit. Synthetic probes assert independent expected verdicts before comparison.
+
+Current result: **12/12 selected mutants killed**. This is coverage of this curated set, not 100% defect coverage or proof of IAM correctness. The original six-mutant harness included false confidence: two AWS mutations were killed by inappropriate GCP parsing, while the case-sensitivity mutation also removed wildcard behavior. Those implementations have been replaced.
+
+## Recording a real model run
+
+`scripts/evaluate_model.py` invokes a provider adapter command once per case. Your adapter must read a JSON `messages` object from stdin, call the chosen model, and write only the candidate policy text to stdout. Use an absolute adapter path; it runs from a temporary empty working directory. Provider credentials belong in the environment, not command arguments or configuration artifacts.
+
+```bash
+python3 scripts/evaluate_model.py \
+  --provider YOUR_PROVIDER --model EXACT_MODEL_VERSION \
+  --config '{"temperature":0}' --output /tmp/iam-model-run-001 \
+  --command /absolute/path/to/your-provider-adapter
+```
+
+This example requires your own provider adapter; none is bundled or silently selected. `--config` records parameters and does not configure the adapter: the adapter must apply the same settings. Model identity is caller-declared, not independently attested.
+
+The runner records prompts, raw responses, grades, UTC timestamps, model/config labels, git revision, dirty status, and input/source hashes. It refuses to overwrite existing run directories, flushes each record, and distinguishes command failures/timeouts from invalid policy output. No automatic repair or retry changes the response.
+
+Prompts contain the original policy and structured workload requirements from `must_allow`. They exclude attack checks, notes, and reference policies. Thus workload checks are disclosed constraints, not held-out generalization tests. An empty working directory is **not** a filesystem sandbox; the adapter is trusted not to read answer keys. Publishing results additionally requires confirming the command actually called the declared model, documenting sampling/repeats and costs, and retaining provider evidence. Test adapters used by unit tests are not LLM runs.
 
 ## Limitations
 
-- Ten hand-written policy cases do not capture the entirety of AWS or GCP IAM surface areas.
-- Evaluates static policy documents and action/resource matches. Does not simulate cloud-side session policies, AWS Organizations SCPs, permission boundaries, or tag-based condition keys not represented in the case definitions.
-- The oracle is an offline set-logic evaluator designed specifically for verifiable reproducibility without cloud API costs or latency.
+- Ten public, hand-written cases are a small, exposed test set. There is no hidden split, contamination control, or statistically supported model ranking.
+- GCP role expansion is a hand-maintained approximation. `roles/editor` contains just six permission patterns here; `roles/owner` is modeled as `*`. Neither is an authoritative export of real permissions. See [Google's role overview](https://cloud.google.com/iam/docs/roles-overview). The evaluator does not model resource hierarchy, group membership, deny policies, or CEL. A policy is assumed attached at the case's project scope; request resource strings are not used to resolve binding inheritance.
+- AWS evaluation omits policy combination, resource policies, SCPs, permission boundaries, trust evaluation, session policies, service-specific action/resource compatibility, ARN-segment rules and cloud-side state. Supported wildcard matching is a simplified string model.
+- Workload permission checks do not execute workloads. Multi-step attacks require additional state and permissions; denying individual listed requests is a conservative case contract, not an exploitability proof. In case 03, allowing code updates also assumes the existing function's role is appropriate; that role is outside the policy being graded.
+- INVALID includes valid cloud policies that this limited oracle cannot understand. Do not report every INVALID result as a model syntax error.
+- No cloud simulation cross-check or live provider-model evaluation has been performed for the committed self-test report. Regression and mutation tests improve evidence about the implementation without establishing full cloud equivalence.

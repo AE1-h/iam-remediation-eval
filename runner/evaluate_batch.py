@@ -5,7 +5,7 @@ Executes remediation agents across all test cases and generates structured repor
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from oracle.evaluator import DeterministicOracle
 from oracle.models import TestCase
@@ -29,11 +29,14 @@ def run_evaluation_for_agent(
     for case in cases:
         proposed_raw = agent.remediate(case)
         result = oracle.evaluate(proposed_raw, case)
+        result.metadata = {"source_kind": "scripted_self_test", "fixture": agent.name,
+                           "proposed_policy": proposed_raw}
         results.append(result)
     return results
 
 
-def run_all_benchmarks(repo_root: Path) -> Dict[str, Any]:
+def run_all_benchmarks(repo_root: Path, output_dir: Optional[Path] = None) -> Dict[str, Any]:
+    """Run scripted oracle self-tests; write artifacts only when explicitly requested."""
     cases_dir = repo_root / "cases"
     cases = [TestCase.load_from_dir(p) for p in sorted(cases_dir.iterdir()) if p.is_dir()]
     oracle = DeterministicOracle()
@@ -48,6 +51,9 @@ def run_all_benchmarks(repo_root: Path) -> Dict[str, Any]:
 
     report: Dict[str, Any] = {
         "metadata": {
+            "evaluation_kind": "scripted_oracle_self_test",
+            "llm_calls": 0,
+            "answer_key_access": ["reference_policy_check", "mixed_outcome_fixture"],
             "total_cases": len(cases),
             "cloud_breakdown": {
                 "aws": sum(1 for c in cases if c.cloud == "aws"),
@@ -57,8 +63,8 @@ def run_all_benchmarks(repo_root: Path) -> Dict[str, Any]:
         "agents": {},
     }
 
-    raw_dir = repo_root / "results" / "raw"
-    raw_dir.mkdir(parents=True, exist_ok=True)
+    if output_dir is not None:
+        (output_dir / "raw").mkdir(parents=True, exist_ok=True)
 
     for agent in agents:
         agent_results = run_evaluation_for_agent(agent, cases, oracle)
@@ -72,6 +78,13 @@ def run_all_benchmarks(repo_root: Path) -> Dict[str, Any]:
         intact_count = sum(1 for r in agent_results if r.is_intact)
 
         summary = {
+            "matrix_counts": {
+                "safe_intact": sum(r.is_safe and r.is_intact for r in agent_results if r.verdict != VerdictStatus.INVALID),
+                "safe_broken": sum(r.is_safe and not r.is_intact for r in agent_results if r.verdict != VerdictStatus.INVALID),
+                "unsafe_intact": sum(not r.is_safe and r.is_intact for r in agent_results if r.verdict != VerdictStatus.INVALID),
+                "unsafe_broken": sum(not r.is_safe and not r.is_intact for r in agent_results if r.verdict != VerdictStatus.INVALID),
+                "not_evaluated": counts["invalid"],
+            },
             "counts": counts,
             "rates": {
                 "correct_rate": round(counts["correct"] / total, 3),
@@ -85,19 +98,22 @@ def run_all_benchmarks(repo_root: Path) -> Dict[str, Any]:
         }
         report["agents"][agent.name] = summary
 
-        with open(raw_dir / f"{agent.name}.json", "w", encoding="utf-8") as f:
-            json.dump([r.to_dict() for r in agent_results], f, indent=2)
+        if output_dir is not None:
+            with open(output_dir / "raw" / f"{agent.name}.json", "w", encoding="utf-8") as f:
+                json.dump([r.to_dict() for r in agent_results], f, indent=2)
 
     return report
 
 
 def generate_markdown_report(report_data: Dict[str, Any]) -> str:
     lines = [
-        "# Deterministic IAM Remediation Evaluation Report",
+        "# Scripted Oracle Self-Test Report",
         "",
-        "Evaluation of 5 distinct remediation agent archetypes across 10 hand-written, real-world IAM privilege escalation cases.",
+        f"{len(report_data['agents'])} hand-written fixtures across {report_data['metadata']['total_cases']} cases. No LLM calls or LLM performance results.",
         "",
-        "| Agent Archetype | Correct | Unsafe (Security Fail) | Broken (Ops Fail) | Invalid (Schema Fail) | Safe Rate | Intact Rate |",
+        "The reference check loads the answer key. The mixed fixture also loads it for seven cases. These rows test evaluator behavior only.",
+        "",
+        "| Scripted Fixture | Correct | Unsafe | Broken | Invalid / Unsupported | Safe Rate | Intact Rate |",
         "| :--- | :---: | :---: | :---: | :---: | :---: | :---: |",
     ]
 
@@ -117,10 +133,12 @@ def generate_markdown_report(report_data: Dict[str, Any]) -> str:
     lines.extend([
         "",
         "### Verdict Definitions",
-        "- **Correct**: The policy blocked all tested privilege escalation vectors AND preserved all permissions strictly needed by the legitimate workload.",
-        "- **Unsafe**: The policy left open one or more privilege escalation paths (Security Failure).",
-        "- **Broken**: The policy revoked permissions required by the operational workload to function (Operations Failure).",
-        "- **Invalid**: The policy output was not parseable as valid JSON or violated standard IAM policy schemas.",
+        "",
+        "- **Correct**: All prohibited requests were denied and all specified workload requests were allowed within the supported policy model.",
+        "- **Unsafe**: At least one prohibited request was allowed. This does not prove a complete attack chain is executable.",
+        "- **Broken**: Safe on tested requests, but at least one workload check failed. Unsafe-and-broken policies have verdict unsafe; both flags remain in JSON.",
+        "- **Invalid**: Malformed input or semantics outside the oracle's supported subset. Safety and integrity were not assessed; false flags are placeholders. Matrix counts exclude invalid results.",
+        "- Rates use all cases as the denominator; invalid cases count as neither safe nor intact.",
         "",
     ])
     return "\n".join(lines)

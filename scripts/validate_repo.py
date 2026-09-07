@@ -21,6 +21,7 @@ from mutation.runner import run_mutation_suite
 from oracle.evaluator import DeterministicOracle
 from oracle.models import TestCase
 from oracle.verdict import VerdictStatus
+from runner.evaluate_batch import run_all_benchmarks, generate_markdown_report
 
 
 def check(name: str, condition: bool, details: str = ""):
@@ -78,26 +79,24 @@ def main():
 
     # 3. Validating Committed Baseline Results
     print("\n[3/4] Validating Committed Benchmark Results...")
-    baseline_file = REPO_ROOT / "results" / "baseline_eval.json"
+    baseline_file = REPO_ROOT / "results" / "self_test_eval.json"
     check("Baseline results file exists", baseline_file.exists())
     with open(baseline_file) as f:
         baseline_data = json.load(f)
 
-    check(
-        "Reference agent achieves 100% correct rate",
-        baseline_data["agents"]["reference_expert"]["rates"]["correct_rate"] == 1.0
-    )
-    check(
-        "Timid under-pruning has 100% unsafe rate (security failure)",
-        baseline_data["agents"]["timid_under_pruning"]["rates"]["unsafe_rate"] == 1.0
-    )
-    check(
-        "Aggressive over-pruning has 100% broken rate (operations failure)",
-        baseline_data["agents"]["aggressive_over_pruning"]["rates"]["broken_rate"] == 1.0
-    )
+    recomputed = run_all_benchmarks(REPO_ROOT)
+    check("Committed self-test JSON exactly matches recomputation", baseline_data == recomputed)
+    check("Committed report exactly matches recomputation",
+          (REPO_ROOT / "results" / "report.md").read_text() == generate_markdown_report(recomputed))
+    raw_dir = REPO_ROOT / "results" / "raw"
+    check("Raw artifact inventory matches fixtures",
+          {p.stem for p in raw_dir.glob("*.json")} == set(recomputed["agents"]))
+    for name, result in recomputed["agents"].items():
+        check(f"{name}: raw artifact matches recomputation",
+              json.loads((raw_dir / f"{name}.json").read_text()) == result["per_case"])
 
     # 4. Hash verification of core cases
-    print("\n[4/4] Verifying File Hashes...")
+    print("\n[4/4] Computing Informational Case Digest (not an independent attestation)...")
     sha256 = hashlib.sha256()
     for cdir in sorted(case_dirs):
         for fname in ["policy.json", "must_deny.json", "must_allow.json", "reference_remediation.json"]:
@@ -107,7 +106,7 @@ def main():
     print(f"       Benchmark cases SHA256 digest: {manifest_digest}")
 
     print("\n=================================================================")
-    print("   ALL AUDIT CHECKS PASSED. REPOSITORY CLAIMS FULLY VERIFIED.   ")
+    print("   CASE ASSERTIONS, MUTANTS, AND SCRIPTED ARTIFACTS VERIFIED.   ")
     print("=================================================================")
 
 
