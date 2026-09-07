@@ -1,0 +1,14 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "SelfInspectOnly",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetUser",
+        "iam:ListAccessKeys"
+      ],
+      "Resource": "arn:aws:iam::123456789012:user/app-worker"
+    }
+  ]
+}

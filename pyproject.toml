@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iam-remediation-eval"
+version = "0.1.0"
+description = "Deterministic evaluation oracle and benchmark for LLM-generated IAM policy least-privilege remediations"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [
+    {name = "ABDALLA", email = "182482342+AE1-h@users.noreply.github.com"}
+]
+keywords = ["iam", "aws", "gcp", "least-privilege", "evaluation", "oracle", "security-benchmarks"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Topic :: Security",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["oracle*", "runner*", "mutation*"]

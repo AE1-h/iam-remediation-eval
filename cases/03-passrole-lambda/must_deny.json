@@ -1,0 +1,12 @@
+[
+  {
+    "description": "Attacker creates a new Lambda function with arbitrary code",
+    "action": "lambda:CreateFunction",
+    "resource": "arn:aws:lambda:us-east-1:123456789012:function:malicious-backdoor"
+  },
+  {
+    "description": "Attacker passes a high-privilege administrative execution role",
+    "action": "iam:PassRole",
+    "resource": "arn:aws:iam::123456789012:role/AccountAdminExecutionRole"
+  }
+]

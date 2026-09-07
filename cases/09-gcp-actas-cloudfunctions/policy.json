@@ -1,0 +1,10 @@
+{
+  "bindings": [
+    {
+      "role": "roles/editor",
+      "members": [
+        "user:ops-analyst@example.com"
+      ]
+    }
+  ]
+}

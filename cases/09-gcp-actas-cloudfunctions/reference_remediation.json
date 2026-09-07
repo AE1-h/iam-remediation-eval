@@ -1,0 +1,10 @@
+{
+  "bindings": [
+    {
+      "role": "roles/cloudfunctions.viewer",
+      "members": [
+        "user:ops-analyst@example.com"
+      ]
+    }
+  ]
+}

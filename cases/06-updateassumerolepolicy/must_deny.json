@@ -1,0 +1,12 @@
+[
+  {
+    "description": "Attacker modifies trust policy of high privilege account access role",
+    "action": "iam:UpdateAssumeRolePolicy",
+    "resource": "arn:aws:iam::123456789012:role/OrganizationAccountAccessRole"
+  },
+  {
+    "description": "Attacker assumes arbitrary sensitive production admin role",
+    "action": "sts:AssumeRole",
+    "resource": "arn:aws:iam::123456789012:role/OrganizationAccountAccessRole"
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "description": "Compliance scanner queries project IAM policy bindings",
+    "action": "resourcemanager.projects.getIamPolicy",
+    "resource": "projects/my-prod-project",
+    "context": {
+      "member": "serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com"
+    }
+  },
+  {
+    "description": "Compliance scanner inspects project metadata",
+    "action": "resourcemanager.projects.get",
+    "resource": "projects/my-prod-project",
+    "context": {
+      "member": "serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com"
+    }
+  }
+]

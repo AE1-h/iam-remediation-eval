@@ -1,0 +1,12 @@
+[
+  {
+    "description": "CI agent inspects target function configuration",
+    "action": "lambda:GetFunction",
+    "resource": "arn:aws:lambda:us-east-1:123456789012:function:invoice-processor"
+  },
+  {
+    "description": "CI agent deploys new ZIP bundle to target function",
+    "action": "lambda:UpdateFunctionCode",
+    "resource": "arn:aws:lambda:us-east-1:123456789012:function:invoice-processor"
+  }
+]

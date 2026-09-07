@@ -1,0 +1,7 @@
+[
+  {
+    "description": "CI agent assumes dedicated staging deployment role",
+    "action": "sts:AssumeRole",
+    "resource": "arn:aws:iam::123456789012:role/app-staging-deployer"
+  }
+]

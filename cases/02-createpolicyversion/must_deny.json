@@ -1,0 +1,7 @@
+[
+  {
+    "description": "Attacker creates a new default policy version with full administrator rights",
+    "action": "iam:CreatePolicyVersion",
+    "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy"
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "description": "Legitimate service checks own user information",
+    "action": "iam:GetUser",
+    "resource": "arn:aws:iam::123456789012:user/app-worker"
+  },
+  {
+    "description": "Legitimate service lists own access keys",
+    "action": "iam:ListAccessKeys",
+    "resource": "arn:aws:iam::123456789012:user/app-worker"
+  }
+]

@@ -1,0 +1,7 @@
+[
+  {
+    "description": "Attacker attaches AdministratorAccess to self or another user",
+    "action": "iam:AttachUserPolicy",
+    "resource": "arn:aws:iam::123456789012:user/sync-service"
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "description": "Audit tool retrieves policy metadata",
+    "action": "iam:GetPolicy",
+    "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy"
+  },
+  {
+    "description": "Audit tool retrieves policy version document",
+    "action": "iam:GetPolicyVersion",
+    "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy"
+  },
+  {
+    "description": "Audit tool lists all versions of a policy",
+    "action": "iam:ListPolicyVersions",
+    "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy"
+  }
+]

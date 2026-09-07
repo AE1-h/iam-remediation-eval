@@ -1,0 +1,18 @@
+[
+  {
+    "description": "Ops analyst views configuration of production function",
+    "action": "cloudfunctions.functions.get",
+    "resource": "projects/my-prod-project/locations/us-central1/functions/order-handler",
+    "context": {
+      "member": "user:ops-analyst@example.com"
+    }
+  },
+  {
+    "description": "Ops analyst lists active project functions",
+    "action": "cloudfunctions.functions.list",
+    "resource": "projects/my-prod-project/locations/us-central1/functions/*",
+    "context": {
+      "member": "user:ops-analyst@example.com"
+    }
+  }
+]

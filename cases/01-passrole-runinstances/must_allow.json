@@ -1,0 +1,17 @@
+[
+  {
+    "description": "Operator monitors existing EC2 fleet",
+    "action": "ec2:DescribeInstances",
+    "resource": "*"
+  },
+  {
+    "description": "Operator starts scheduled batch compute node",
+    "action": "ec2:StartInstances",
+    "resource": "arn:aws:ec2:us-east-1:123456789012:instance/i-0123456789abcdef0"
+  },
+  {
+    "description": "Operator shuts down scheduled batch compute node",
+    "action": "ec2:StopInstances",
+    "resource": "arn:aws:ec2:us-east-1:123456789012:instance/i-0123456789abcdef0"
+  }
+]

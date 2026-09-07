@@ -1,0 +1,10 @@
+{
+  "bindings": [
+    {
+      "role": "roles/viewer",
+      "members": [
+        "serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com"
+      ]
+    }
+  ]
+}

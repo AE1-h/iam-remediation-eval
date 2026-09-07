@@ -1,0 +1,12 @@
+[
+  {
+    "description": "Attacker generates access keys for corporate security administrator",
+    "action": "iam:CreateAccessKey",
+    "resource": "arn:aws:iam::123456789012:user/security-admin"
+  },
+  {
+    "description": "Attacker deletes access keys of other production service principals",
+    "action": "iam:DeleteAccessKey",
+    "resource": "arn:aws:iam::123456789012:user/root-automation"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DirectorySyncService",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetUser",
+        "iam:ListUsers",
+        "iam:ListAttachedUserPolicies",
+        "iam:AttachUserPolicy"
+      ],
+      "Resource": "*"
+    }
+  ]
+}

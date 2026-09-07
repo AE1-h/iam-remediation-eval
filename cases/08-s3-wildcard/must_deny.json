@@ -1,0 +1,17 @@
+[
+  {
+    "description": "Attacker exfiltrates confidential corporate finance records",
+    "action": "s3:GetObject",
+    "resource": "arn:aws:s3:::corporate-finance-vault/q4_earnings.parquet"
+  },
+  {
+    "description": "Attacker deletes production audit logging bucket",
+    "action": "s3:DeleteBucket",
+    "resource": "arn:aws:s3:::corporate-compliance-logs"
+  },
+  {
+    "description": "Attacker alters bucket access policy to expose internal data",
+    "action": "s3:PutBucketPolicy",
+    "resource": "arn:aws:s3:::app-static-assets-prod"
+  }
+]

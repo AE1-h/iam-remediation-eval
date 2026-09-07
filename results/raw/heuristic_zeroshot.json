@@ -1,0 +1,213 @@
+[
+  {
+    "case_id": "01-passrole-runinstances",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 2,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam:PassRole",
+        "resource": "arn:aws:iam::123456789012:role/AdministratorRole",
+        "allowed": true,
+        "description": "Attacker passes arbitrary admin role to newly created EC2 instance",
+        "matched_statement": "OverlyPermissiveEC2AndPassRole",
+        "reason": "Allowed by statement 'OverlyPermissiveEC2AndPassRole'"
+      },
+      {
+        "action": "ec2:RunInstances",
+        "resource": "arn:aws:ec2:us-east-1:123456789012:instance/*",
+        "allowed": true,
+        "description": "Attacker spawns new EC2 compute nodes to hijack metadata credentials",
+        "matched_statement": "OverlyPermissiveEC2AndPassRole",
+        "reason": "Allowed by statement 'OverlyPermissiveEC2AndPassRole'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "02-createpolicyversion",
+    "verdict": "broken",
+    "is_safe": true,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 2,
+      "passed_must_deny": 1,
+      "passed_must_allow": 1
+    },
+    "unsafe_violations": [],
+    "broken_violations": [
+      {
+        "action": "iam:GetPolicyVersion",
+        "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy",
+        "allowed": false,
+        "description": "Audit tool retrieves policy version document",
+        "matched_statement": null,
+        "reason": "Implicit default deny (no matching Allow statement)"
+      },
+      {
+        "action": "iam:ListPolicyVersions",
+        "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy",
+        "allowed": false,
+        "description": "Audit tool lists all versions of a policy",
+        "matched_statement": null,
+        "reason": "Implicit default deny (no matching Allow statement)"
+      }
+    ],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "03-passrole-lambda",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 2,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [
+      {
+        "action": "lambda:CreateFunction",
+        "resource": "arn:aws:lambda:us-east-1:123456789012:function:malicious-backdoor",
+        "allowed": true,
+        "description": "Attacker creates a new Lambda function with arbitrary code",
+        "matched_statement": "LambdaDeployerBroadAccess",
+        "reason": "Allowed by statement 'LambdaDeployerBroadAccess'"
+      },
+      {
+        "action": "iam:PassRole",
+        "resource": "arn:aws:iam::123456789012:role/AccountAdminExecutionRole",
+        "allowed": true,
+        "description": "Attacker passes a high-privilege administrative execution role",
+        "matched_statement": "LambdaDeployerBroadAccess",
+        "reason": "Allowed by statement 'LambdaDeployerBroadAccess'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "04-attachuserpolicy",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 1,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "05-createaccesskey",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 2,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "06-updateassumerolepolicy",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 2,
+      "passed_must_allow": 1
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "07-setdefaultpolicyversion",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 1,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "08-s3-wildcard",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 3,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "09-gcp-actas-cloudfunctions",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 2,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "10-gcp-set-iampolicy",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 1,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  }
+]

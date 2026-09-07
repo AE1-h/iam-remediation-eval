@@ -1,0 +1,18 @@
+[
+  {
+    "description": "Attacker creates cloud function to execute arbitrary privileged code",
+    "action": "cloudfunctions.functions.create",
+    "resource": "projects/my-prod-project/locations/us-central1/functions/escalator",
+    "context": {
+      "member": "user:ops-analyst@example.com"
+    }
+  },
+  {
+    "description": "Attacker impersonates compute engine default service account",
+    "action": "iam.serviceAccounts.actAs",
+    "resource": "projects/my-prod-project/serviceAccounts/123456789-compute@developer.gserviceaccount.com",
+    "context": {
+      "member": "user:ops-analyst@example.com"
+    }
+  }
+]

@@ -1,0 +1,17 @@
+[
+  {
+    "description": "Directory sync checks specific user object",
+    "action": "iam:GetUser",
+    "resource": "arn:aws:iam::123456789012:user/alice"
+  },
+  {
+    "description": "Directory sync enumerates users",
+    "action": "iam:ListUsers",
+    "resource": "*"
+  },
+  {
+    "description": "Directory sync enumerates policies attached to user",
+    "action": "iam:ListAttachedUserPolicies",
+    "resource": "arn:aws:iam::123456789012:user/alice"
+  }
+]

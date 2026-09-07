@@ -1,0 +1,7 @@
+[
+  {
+    "description": "Attacker flips active policy default to obsolete version",
+    "action": "iam:SetDefaultPolicyVersion",
+    "resource": "arn:aws:iam::123456789012:policy/EngineeringPolicy"
+  }
+]

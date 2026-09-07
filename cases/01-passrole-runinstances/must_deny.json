@@ -1,0 +1,12 @@
+[
+  {
+    "description": "Attacker passes arbitrary admin role to newly created EC2 instance",
+    "action": "iam:PassRole",
+    "resource": "arn:aws:iam::123456789012:role/AdministratorRole"
+  },
+  {
+    "description": "Attacker spawns new EC2 compute nodes to hijack metadata credentials",
+    "action": "ec2:RunInstances",
+    "resource": "arn:aws:ec2:us-east-1:123456789012:instance/*"
+  }
+]

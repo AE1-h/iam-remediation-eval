@@ -1,0 +1,1300 @@
+{
+  "metadata": {
+    "total_cases": 10,
+    "cloud_breakdown": {
+      "aws": 8,
+      "gcp": 2
+    }
+  },
+  "agents": {
+    "reference_expert": {
+      "counts": {
+        "correct": 10,
+        "unsafe": 0,
+        "broken": 0,
+        "invalid": 0
+      },
+      "rates": {
+        "correct_rate": 1.0,
+        "unsafe_rate": 0.0,
+        "broken_rate": 0.0,
+        "invalid_rate": 0.0,
+        "safe_rate": 1.0,
+        "intact_rate": 1.0
+      },
+      "per_case": [
+        {
+          "case_id": "01-passrole-runinstances",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 2,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "02-createpolicyversion",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 1,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "03-passrole-lambda",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 2,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "04-attachuserpolicy",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 1,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "05-createaccesskey",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 2,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "06-updateassumerolepolicy",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 2,
+            "passed_must_allow": 1
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "07-setdefaultpolicyversion",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 1,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "08-s3-wildcard",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 3,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "09-gcp-actas-cloudfunctions",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 2,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "10-gcp-set-iampolicy",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 1,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        }
+      ]
+    },
+    "timid_under_pruning": {
+      "counts": {
+        "correct": 0,
+        "unsafe": 10,
+        "broken": 0,
+        "invalid": 0
+      },
+      "rates": {
+        "correct_rate": 0.0,
+        "unsafe_rate": 1.0,
+        "broken_rate": 0.0,
+        "invalid_rate": 0.0,
+        "safe_rate": 0.0,
+        "intact_rate": 1.0
+      },
+      "per_case": [
+        {
+          "case_id": "01-passrole-runinstances",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 2,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [
+            {
+              "action": "iam:PassRole",
+              "resource": "arn:aws:iam::123456789012:role/AdministratorRole",
+              "allowed": true,
+              "description": "Attacker passes arbitrary admin role to newly created EC2 instance",
+              "matched_statement": "Remediated_OverlyPermissiveEC2AndPassRole",
+              "reason": "Allowed by statement 'Remediated_OverlyPermissiveEC2AndPassRole'"
+            },
+            {
+              "action": "ec2:RunInstances",
+              "resource": "arn:aws:ec2:us-east-1:123456789012:instance/*",
+              "allowed": true,
+              "description": "Attacker spawns new EC2 compute nodes to hijack metadata credentials",
+              "matched_statement": "Remediated_OverlyPermissiveEC2AndPassRole",
+              "reason": "Allowed by statement 'Remediated_OverlyPermissiveEC2AndPassRole'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "02-createpolicyversion",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 1,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [
+            {
+              "action": "iam:CreatePolicyVersion",
+              "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy",
+              "allowed": true,
+              "description": "Attacker creates a new default policy version with full administrator rights",
+              "matched_statement": "Remediated_AuditAndPolicyAdmin",
+              "reason": "Allowed by statement 'Remediated_AuditAndPolicyAdmin'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "03-passrole-lambda",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 2,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [
+            {
+              "action": "lambda:CreateFunction",
+              "resource": "arn:aws:lambda:us-east-1:123456789012:function:malicious-backdoor",
+              "allowed": true,
+              "description": "Attacker creates a new Lambda function with arbitrary code",
+              "matched_statement": "Remediated_LambdaDeployerBroadAccess",
+              "reason": "Allowed by statement 'Remediated_LambdaDeployerBroadAccess'"
+            },
+            {
+              "action": "iam:PassRole",
+              "resource": "arn:aws:iam::123456789012:role/AccountAdminExecutionRole",
+              "allowed": true,
+              "description": "Attacker passes a high-privilege administrative execution role",
+              "matched_statement": "Remediated_LambdaDeployerBroadAccess",
+              "reason": "Allowed by statement 'Remediated_LambdaDeployerBroadAccess'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "04-attachuserpolicy",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 1,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [
+            {
+              "action": "iam:AttachUserPolicy",
+              "resource": "arn:aws:iam::123456789012:user/sync-service",
+              "allowed": true,
+              "description": "Attacker attaches AdministratorAccess to self or another user",
+              "matched_statement": "Remediated_DirectorySyncService",
+              "reason": "Allowed by statement 'Remediated_DirectorySyncService'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "05-createaccesskey",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 2,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [
+            {
+              "action": "iam:CreateAccessKey",
+              "resource": "arn:aws:iam::123456789012:user/security-admin",
+              "allowed": true,
+              "description": "Attacker generates access keys for corporate security administrator",
+              "matched_statement": "Remediated_UnscopedAccessKeyManager",
+              "reason": "Allowed by statement 'Remediated_UnscopedAccessKeyManager'"
+            },
+            {
+              "action": "iam:DeleteAccessKey",
+              "resource": "arn:aws:iam::123456789012:user/root-automation",
+              "allowed": true,
+              "description": "Attacker deletes access keys of other production service principals",
+              "matched_statement": "Remediated_UnscopedAccessKeyManager",
+              "reason": "Allowed by statement 'Remediated_UnscopedAccessKeyManager'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "06-updateassumerolepolicy",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 2,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 1
+          },
+          "unsafe_violations": [
+            {
+              "action": "iam:UpdateAssumeRolePolicy",
+              "resource": "arn:aws:iam::123456789012:role/OrganizationAccountAccessRole",
+              "allowed": true,
+              "description": "Attacker modifies trust policy of high privilege account access role",
+              "matched_statement": "Remediated_DeploymentRoleRunner",
+              "reason": "Allowed by statement 'Remediated_DeploymentRoleRunner'"
+            },
+            {
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::123456789012:role/OrganizationAccountAccessRole",
+              "allowed": true,
+              "description": "Attacker assumes arbitrary sensitive production admin role",
+              "matched_statement": "Remediated_DeploymentRoleRunner",
+              "reason": "Allowed by statement 'Remediated_DeploymentRoleRunner'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "07-setdefaultpolicyversion",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 1,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [
+            {
+              "action": "iam:SetDefaultPolicyVersion",
+              "resource": "arn:aws:iam::123456789012:policy/EngineeringPolicy",
+              "allowed": true,
+              "description": "Attacker flips active policy default to obsolete version",
+              "matched_statement": "Remediated_PolicyInventoryCollector",
+              "reason": "Allowed by statement 'Remediated_PolicyInventoryCollector'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "08-s3-wildcard",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 3,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [
+            {
+              "action": "s3:GetObject",
+              "resource": "arn:aws:s3:::corporate-finance-vault/q4_earnings.parquet",
+              "allowed": true,
+              "description": "Attacker exfiltrates confidential corporate finance records",
+              "matched_statement": "Remediated_OverlyBroadS3Access",
+              "reason": "Allowed by statement 'Remediated_OverlyBroadS3Access'"
+            },
+            {
+              "action": "s3:DeleteBucket",
+              "resource": "arn:aws:s3:::corporate-compliance-logs",
+              "allowed": true,
+              "description": "Attacker deletes production audit logging bucket",
+              "matched_statement": "Remediated_OverlyBroadS3Access",
+              "reason": "Allowed by statement 'Remediated_OverlyBroadS3Access'"
+            },
+            {
+              "action": "s3:PutBucketPolicy",
+              "resource": "arn:aws:s3:::app-static-assets-prod",
+              "allowed": true,
+              "description": "Attacker alters bucket access policy to expose internal data",
+              "matched_statement": "Remediated_OverlyBroadS3Access",
+              "reason": "Allowed by statement 'Remediated_OverlyBroadS3Access'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "09-gcp-actas-cloudfunctions",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 2,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [
+            {
+              "action": "cloudfunctions.functions.create",
+              "resource": "projects/my-prod-project/locations/us-central1/functions/escalator",
+              "allowed": true,
+              "description": "Attacker creates cloud function to execute arbitrary privileged code",
+              "matched_statement": "roles/editor",
+              "reason": "Allowed by GCP role 'roles/editor'"
+            },
+            {
+              "action": "iam.serviceAccounts.actAs",
+              "resource": "projects/my-prod-project/serviceAccounts/123456789-compute@developer.gserviceaccount.com",
+              "allowed": true,
+              "description": "Attacker impersonates compute engine default service account",
+              "matched_statement": "roles/editor",
+              "reason": "Allowed by GCP role 'roles/editor'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "10-gcp-set-iampolicy",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 1,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [
+            {
+              "action": "resourcemanager.projects.setIamPolicy",
+              "resource": "projects/my-prod-project",
+              "allowed": true,
+              "description": "Attacker alters project IAM bindings to grant roles/owner",
+              "matched_statement": "roles/resourcemanager.projectIamAdmin",
+              "reason": "Allowed by GCP role 'roles/resourcemanager.projectIamAdmin'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        }
+      ]
+    },
+    "aggressive_over_pruning": {
+      "counts": {
+        "correct": 0,
+        "unsafe": 0,
+        "broken": 10,
+        "invalid": 0
+      },
+      "rates": {
+        "correct_rate": 0.0,
+        "unsafe_rate": 0.0,
+        "broken_rate": 1.0,
+        "invalid_rate": 0.0,
+        "safe_rate": 1.0,
+        "intact_rate": 0.0
+      },
+      "per_case": [
+        {
+          "case_id": "01-passrole-runinstances",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 3,
+            "passed_must_deny": 2,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "ec2:DescribeInstances",
+              "resource": "*",
+              "allowed": false,
+              "description": "Operator monitors existing EC2 fleet",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "ec2:StartInstances",
+              "resource": "arn:aws:ec2:us-east-1:123456789012:instance/i-0123456789abcdef0",
+              "allowed": false,
+              "description": "Operator starts scheduled batch compute node",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "ec2:StopInstances",
+              "resource": "arn:aws:ec2:us-east-1:123456789012:instance/i-0123456789abcdef0",
+              "allowed": false,
+              "description": "Operator shuts down scheduled batch compute node",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "02-createpolicyversion",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 3,
+            "passed_must_deny": 1,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "iam:GetPolicy",
+              "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy",
+              "allowed": false,
+              "description": "Audit tool retrieves policy metadata",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "iam:GetPolicyVersion",
+              "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy",
+              "allowed": false,
+              "description": "Audit tool retrieves policy version document",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "iam:ListPolicyVersions",
+              "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy",
+              "allowed": false,
+              "description": "Audit tool lists all versions of a policy",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "03-passrole-lambda",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 2,
+            "passed_must_deny": 2,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "lambda:GetFunction",
+              "resource": "arn:aws:lambda:us-east-1:123456789012:function:invoice-processor",
+              "allowed": false,
+              "description": "CI agent inspects target function configuration",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "lambda:UpdateFunctionCode",
+              "resource": "arn:aws:lambda:us-east-1:123456789012:function:invoice-processor",
+              "allowed": false,
+              "description": "CI agent deploys new ZIP bundle to target function",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "04-attachuserpolicy",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 3,
+            "passed_must_deny": 1,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "iam:GetUser",
+              "resource": "arn:aws:iam::123456789012:user/alice",
+              "allowed": false,
+              "description": "Directory sync checks specific user object",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "iam:ListUsers",
+              "resource": "*",
+              "allowed": false,
+              "description": "Directory sync enumerates users",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "iam:ListAttachedUserPolicies",
+              "resource": "arn:aws:iam::123456789012:user/alice",
+              "allowed": false,
+              "description": "Directory sync enumerates policies attached to user",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "05-createaccesskey",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 2,
+            "passed_must_deny": 2,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "iam:GetUser",
+              "resource": "arn:aws:iam::123456789012:user/app-worker",
+              "allowed": false,
+              "description": "Legitimate service checks own user information",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "iam:ListAccessKeys",
+              "resource": "arn:aws:iam::123456789012:user/app-worker",
+              "allowed": false,
+              "description": "Legitimate service lists own access keys",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "06-updateassumerolepolicy",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 1,
+            "passed_must_deny": 2,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "sts:AssumeRole",
+              "resource": "arn:aws:iam::123456789012:role/app-staging-deployer",
+              "allowed": false,
+              "description": "CI agent assumes dedicated staging deployment role",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "07-setdefaultpolicyversion",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 3,
+            "passed_must_deny": 1,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "iam:GetPolicy",
+              "resource": "arn:aws:iam::123456789012:policy/EngineeringPolicy",
+              "allowed": false,
+              "description": "Inventory collector retrieves policy metadata",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "iam:GetPolicyVersion",
+              "resource": "arn:aws:iam::123456789012:policy/EngineeringPolicy",
+              "allowed": false,
+              "description": "Inventory collector retrieves policy version document",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "iam:ListPolicyVersions",
+              "resource": "arn:aws:iam::123456789012:policy/EngineeringPolicy",
+              "allowed": false,
+              "description": "Inventory collector lists all policy versions",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "08-s3-wildcard",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 3,
+            "passed_must_deny": 3,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "s3:ListBucket",
+              "resource": "arn:aws:s3:::app-static-assets-prod",
+              "allowed": false,
+              "description": "Static sync lists assets bucket",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "s3:GetObject",
+              "resource": "arn:aws:s3:::app-static-assets-prod/css/main.css",
+              "allowed": false,
+              "description": "Static sync downloads assets for verification",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            },
+            {
+              "action": "s3:PutObject",
+              "resource": "arn:aws:s3:::app-static-assets-prod/css/main.css",
+              "allowed": false,
+              "description": "Static sync uploads new static asset build",
+              "matched_statement": "LockedDownDefault",
+              "reason": "Explicitly denied by statement 'LockedDownDefault'"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "09-gcp-actas-cloudfunctions",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 2,
+            "passed_must_deny": 2,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "cloudfunctions.functions.get",
+              "resource": "projects/my-prod-project/locations/us-central1/functions/order-handler",
+              "allowed": false,
+              "description": "Ops analyst views configuration of production function",
+              "matched_statement": null,
+              "reason": "GCP implicit deny: no role binding permits this action"
+            },
+            {
+              "action": "cloudfunctions.functions.list",
+              "resource": "projects/my-prod-project/locations/us-central1/functions/*",
+              "allowed": false,
+              "description": "Ops analyst lists active project functions",
+              "matched_statement": null,
+              "reason": "GCP implicit deny: no role binding permits this action"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "10-gcp-set-iampolicy",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 2,
+            "passed_must_deny": 1,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "resourcemanager.projects.getIamPolicy",
+              "resource": "projects/my-prod-project",
+              "allowed": false,
+              "description": "Compliance scanner queries project IAM policy bindings",
+              "matched_statement": null,
+              "reason": "GCP implicit deny: no role binding permits this action"
+            },
+            {
+              "action": "resourcemanager.projects.get",
+              "resource": "projects/my-prod-project",
+              "allowed": false,
+              "description": "Compliance scanner inspects project metadata",
+              "matched_statement": null,
+              "reason": "GCP implicit deny: no role binding permits this action"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        }
+      ]
+    },
+    "heuristic_zeroshot": {
+      "counts": {
+        "correct": 7,
+        "unsafe": 2,
+        "broken": 1,
+        "invalid": 0
+      },
+      "rates": {
+        "correct_rate": 0.7,
+        "unsafe_rate": 0.2,
+        "broken_rate": 0.1,
+        "invalid_rate": 0.0,
+        "safe_rate": 0.8,
+        "intact_rate": 0.9
+      },
+      "per_case": [
+        {
+          "case_id": "01-passrole-runinstances",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 2,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [
+            {
+              "action": "iam:PassRole",
+              "resource": "arn:aws:iam::123456789012:role/AdministratorRole",
+              "allowed": true,
+              "description": "Attacker passes arbitrary admin role to newly created EC2 instance",
+              "matched_statement": "OverlyPermissiveEC2AndPassRole",
+              "reason": "Allowed by statement 'OverlyPermissiveEC2AndPassRole'"
+            },
+            {
+              "action": "ec2:RunInstances",
+              "resource": "arn:aws:ec2:us-east-1:123456789012:instance/*",
+              "allowed": true,
+              "description": "Attacker spawns new EC2 compute nodes to hijack metadata credentials",
+              "matched_statement": "OverlyPermissiveEC2AndPassRole",
+              "reason": "Allowed by statement 'OverlyPermissiveEC2AndPassRole'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "02-createpolicyversion",
+          "verdict": "broken",
+          "is_safe": true,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 2,
+            "passed_must_deny": 1,
+            "passed_must_allow": 1
+          },
+          "unsafe_violations": [],
+          "broken_violations": [
+            {
+              "action": "iam:GetPolicyVersion",
+              "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy",
+              "allowed": false,
+              "description": "Audit tool retrieves policy version document",
+              "matched_statement": null,
+              "reason": "Implicit default deny (no matching Allow statement)"
+            },
+            {
+              "action": "iam:ListPolicyVersions",
+              "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy",
+              "allowed": false,
+              "description": "Audit tool lists all versions of a policy",
+              "matched_statement": null,
+              "reason": "Implicit default deny (no matching Allow statement)"
+            }
+          ],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "03-passrole-lambda",
+          "verdict": "unsafe",
+          "is_safe": false,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 2,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [
+            {
+              "action": "lambda:CreateFunction",
+              "resource": "arn:aws:lambda:us-east-1:123456789012:function:malicious-backdoor",
+              "allowed": true,
+              "description": "Attacker creates a new Lambda function with arbitrary code",
+              "matched_statement": "LambdaDeployerBroadAccess",
+              "reason": "Allowed by statement 'LambdaDeployerBroadAccess'"
+            },
+            {
+              "action": "iam:PassRole",
+              "resource": "arn:aws:iam::123456789012:role/AccountAdminExecutionRole",
+              "allowed": true,
+              "description": "Attacker passes a high-privilege administrative execution role",
+              "matched_statement": "LambdaDeployerBroadAccess",
+              "reason": "Allowed by statement 'LambdaDeployerBroadAccess'"
+            }
+          ],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "04-attachuserpolicy",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 1,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "05-createaccesskey",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 2,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "06-updateassumerolepolicy",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 2,
+            "passed_must_allow": 1
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "07-setdefaultpolicyversion",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 1,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "08-s3-wildcard",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 3,
+            "passed_must_allow": 3
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "09-gcp-actas-cloudfunctions",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 2,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        },
+        {
+          "case_id": "10-gcp-set-iampolicy",
+          "verdict": "correct",
+          "is_safe": true,
+          "is_intact": true,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 1,
+            "passed_must_allow": 2
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": null,
+          "metadata": {}
+        }
+      ]
+    },
+    "syntax_hallucinator": {
+      "counts": {
+        "correct": 0,
+        "unsafe": 0,
+        "broken": 0,
+        "invalid": 10
+      },
+      "rates": {
+        "correct_rate": 0.0,
+        "unsafe_rate": 0.0,
+        "broken_rate": 0.0,
+        "invalid_rate": 1.0,
+        "safe_rate": 0.0,
+        "intact_rate": 0.0
+      },
+      "per_case": [
+        {
+          "case_id": "01-passrole-runinstances",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        },
+        {
+          "case_id": "02-createpolicyversion",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        },
+        {
+          "case_id": "03-passrole-lambda",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        },
+        {
+          "case_id": "04-attachuserpolicy",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        },
+        {
+          "case_id": "05-createaccesskey",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        },
+        {
+          "case_id": "06-updateassumerolepolicy",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        },
+        {
+          "case_id": "07-setdefaultpolicyversion",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        },
+        {
+          "case_id": "08-s3-wildcard",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON parse error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        },
+        {
+          "case_id": "09-gcp-actas-cloudfunctions",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        },
+        {
+          "case_id": "10-gcp-set-iampolicy",
+          "verdict": "invalid",
+          "is_safe": false,
+          "is_intact": false,
+          "counts": {
+            "unsafe_violations": 0,
+            "broken_violations": 0,
+            "passed_must_deny": 0,
+            "passed_must_allow": 0
+          },
+          "unsafe_violations": [],
+          "broken_violations": [],
+          "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
+          "metadata": {}
+        }
+      ]
+    }
+  }
+}

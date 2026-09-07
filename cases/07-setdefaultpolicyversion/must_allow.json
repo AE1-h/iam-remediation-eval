@@ -1,0 +1,17 @@
+[
+  {
+    "description": "Inventory collector retrieves policy metadata",
+    "action": "iam:GetPolicy",
+    "resource": "arn:aws:iam::123456789012:policy/EngineeringPolicy"
+  },
+  {
+    "description": "Inventory collector retrieves policy version document",
+    "action": "iam:GetPolicyVersion",
+    "resource": "arn:aws:iam::123456789012:policy/EngineeringPolicy"
+  },
+  {
+    "description": "Inventory collector lists all policy versions",
+    "action": "iam:ListPolicyVersions",
+    "resource": "arn:aws:iam::123456789012:policy/EngineeringPolicy"
+  }
+]

@@ -1,0 +1,308 @@
+[
+  {
+    "case_id": "01-passrole-runinstances",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 2,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam:PassRole",
+        "resource": "arn:aws:iam::123456789012:role/AdministratorRole",
+        "allowed": true,
+        "description": "Attacker passes arbitrary admin role to newly created EC2 instance",
+        "matched_statement": "Remediated_OverlyPermissiveEC2AndPassRole",
+        "reason": "Allowed by statement 'Remediated_OverlyPermissiveEC2AndPassRole'"
+      },
+      {
+        "action": "ec2:RunInstances",
+        "resource": "arn:aws:ec2:us-east-1:123456789012:instance/*",
+        "allowed": true,
+        "description": "Attacker spawns new EC2 compute nodes to hijack metadata credentials",
+        "matched_statement": "Remediated_OverlyPermissiveEC2AndPassRole",
+        "reason": "Allowed by statement 'Remediated_OverlyPermissiveEC2AndPassRole'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "02-createpolicyversion",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 1,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam:CreatePolicyVersion",
+        "resource": "arn:aws:iam::123456789012:policy/ComplianceAuditRolePolicy",
+        "allowed": true,
+        "description": "Attacker creates a new default policy version with full administrator rights",
+        "matched_statement": "Remediated_AuditAndPolicyAdmin",
+        "reason": "Allowed by statement 'Remediated_AuditAndPolicyAdmin'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "03-passrole-lambda",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 2,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [
+      {
+        "action": "lambda:CreateFunction",
+        "resource": "arn:aws:lambda:us-east-1:123456789012:function:malicious-backdoor",
+        "allowed": true,
+        "description": "Attacker creates a new Lambda function with arbitrary code",
+        "matched_statement": "Remediated_LambdaDeployerBroadAccess",
+        "reason": "Allowed by statement 'Remediated_LambdaDeployerBroadAccess'"
+      },
+      {
+        "action": "iam:PassRole",
+        "resource": "arn:aws:iam::123456789012:role/AccountAdminExecutionRole",
+        "allowed": true,
+        "description": "Attacker passes a high-privilege administrative execution role",
+        "matched_statement": "Remediated_LambdaDeployerBroadAccess",
+        "reason": "Allowed by statement 'Remediated_LambdaDeployerBroadAccess'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "04-attachuserpolicy",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 1,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam:AttachUserPolicy",
+        "resource": "arn:aws:iam::123456789012:user/sync-service",
+        "allowed": true,
+        "description": "Attacker attaches AdministratorAccess to self or another user",
+        "matched_statement": "Remediated_DirectorySyncService",
+        "reason": "Allowed by statement 'Remediated_DirectorySyncService'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "05-createaccesskey",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 2,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam:CreateAccessKey",
+        "resource": "arn:aws:iam::123456789012:user/security-admin",
+        "allowed": true,
+        "description": "Attacker generates access keys for corporate security administrator",
+        "matched_statement": "Remediated_UnscopedAccessKeyManager",
+        "reason": "Allowed by statement 'Remediated_UnscopedAccessKeyManager'"
+      },
+      {
+        "action": "iam:DeleteAccessKey",
+        "resource": "arn:aws:iam::123456789012:user/root-automation",
+        "allowed": true,
+        "description": "Attacker deletes access keys of other production service principals",
+        "matched_statement": "Remediated_UnscopedAccessKeyManager",
+        "reason": "Allowed by statement 'Remediated_UnscopedAccessKeyManager'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "06-updateassumerolepolicy",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 2,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 1
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam:UpdateAssumeRolePolicy",
+        "resource": "arn:aws:iam::123456789012:role/OrganizationAccountAccessRole",
+        "allowed": true,
+        "description": "Attacker modifies trust policy of high privilege account access role",
+        "matched_statement": "Remediated_DeploymentRoleRunner",
+        "reason": "Allowed by statement 'Remediated_DeploymentRoleRunner'"
+      },
+      {
+        "action": "sts:AssumeRole",
+        "resource": "arn:aws:iam::123456789012:role/OrganizationAccountAccessRole",
+        "allowed": true,
+        "description": "Attacker assumes arbitrary sensitive production admin role",
+        "matched_statement": "Remediated_DeploymentRoleRunner",
+        "reason": "Allowed by statement 'Remediated_DeploymentRoleRunner'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "07-setdefaultpolicyversion",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 1,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam:SetDefaultPolicyVersion",
+        "resource": "arn:aws:iam::123456789012:policy/EngineeringPolicy",
+        "allowed": true,
+        "description": "Attacker flips active policy default to obsolete version",
+        "matched_statement": "Remediated_PolicyInventoryCollector",
+        "reason": "Allowed by statement 'Remediated_PolicyInventoryCollector'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "08-s3-wildcard",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 3,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [
+      {
+        "action": "s3:GetObject",
+        "resource": "arn:aws:s3:::corporate-finance-vault/q4_earnings.parquet",
+        "allowed": true,
+        "description": "Attacker exfiltrates confidential corporate finance records",
+        "matched_statement": "Remediated_OverlyBroadS3Access",
+        "reason": "Allowed by statement 'Remediated_OverlyBroadS3Access'"
+      },
+      {
+        "action": "s3:DeleteBucket",
+        "resource": "arn:aws:s3:::corporate-compliance-logs",
+        "allowed": true,
+        "description": "Attacker deletes production audit logging bucket",
+        "matched_statement": "Remediated_OverlyBroadS3Access",
+        "reason": "Allowed by statement 'Remediated_OverlyBroadS3Access'"
+      },
+      {
+        "action": "s3:PutBucketPolicy",
+        "resource": "arn:aws:s3:::app-static-assets-prod",
+        "allowed": true,
+        "description": "Attacker alters bucket access policy to expose internal data",
+        "matched_statement": "Remediated_OverlyBroadS3Access",
+        "reason": "Allowed by statement 'Remediated_OverlyBroadS3Access'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "09-gcp-actas-cloudfunctions",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 2,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [
+      {
+        "action": "cloudfunctions.functions.create",
+        "resource": "projects/my-prod-project/locations/us-central1/functions/escalator",
+        "allowed": true,
+        "description": "Attacker creates cloud function to execute arbitrary privileged code",
+        "matched_statement": "roles/editor",
+        "reason": "Allowed by GCP role 'roles/editor'"
+      },
+      {
+        "action": "iam.serviceAccounts.actAs",
+        "resource": "projects/my-prod-project/serviceAccounts/123456789-compute@developer.gserviceaccount.com",
+        "allowed": true,
+        "description": "Attacker impersonates compute engine default service account",
+        "matched_statement": "roles/editor",
+        "reason": "Allowed by GCP role 'roles/editor'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  },
+  {
+    "case_id": "10-gcp-set-iampolicy",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 1,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [
+      {
+        "action": "resourcemanager.projects.setIamPolicy",
+        "resource": "projects/my-prod-project",
+        "allowed": true,
+        "description": "Attacker alters project IAM bindings to grant roles/owner",
+        "matched_statement": "roles/resourcemanager.projectIamAdmin",
+        "reason": "Allowed by GCP role 'roles/resourcemanager.projectIamAdmin'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {}
+  }
+]

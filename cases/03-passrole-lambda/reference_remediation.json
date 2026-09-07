@@ -1,0 +1,14 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "TargetFunctionDeploymentOnly",
+      "Effect": "Allow",
+      "Action": [
+        "lambda:GetFunction",
+        "lambda:UpdateFunctionCode"
+      ],
+      "Resource": "arn:aws:lambda:us-east-1:123456789012:function:invoice-processor"
+    }
+  ]
+}

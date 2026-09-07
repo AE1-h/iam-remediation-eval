@@ -1,0 +1,10 @@
+[
+  {
+    "description": "Attacker alters project IAM bindings to grant roles/owner",
+    "action": "resourcemanager.projects.setIamPolicy",
+    "resource": "projects/my-prod-project",
+    "context": {
+      "member": "serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com"
+    }
+  }
+]
