@@ -32,7 +32,9 @@ def main():
     case = TestCase.load_from_dir(case_dir)
 
     policy_path = Path(args.policy)
-    if policy_path.exists():
+    # Avoid filesystem filename-length errors for inline policy JSON.
+    is_inline = args.policy.lstrip().startswith(("{", "["))
+    if not is_inline and policy_path.is_file():
         with open(policy_path, "r", encoding="utf-8") as f:
             policy_content = f.read()
     else:

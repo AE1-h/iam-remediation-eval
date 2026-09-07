@@ -1,5 +1,15 @@
 [
   {
+    "description": "Service creates a replacement access key for itself",
+    "action": "iam:CreateAccessKey",
+    "resource": "arn:aws:iam::123456789012:user/app-worker"
+  },
+  {
+    "description": "Service deletes its old access key after replacement",
+    "action": "iam:DeleteAccessKey",
+    "resource": "arn:aws:iam::123456789012:user/app-worker"
+  },
+  {
     "description": "Legitimate service checks own user information",
     "action": "iam:GetUser",
     "resource": "arn:aws:iam::123456789012:user/app-worker"

@@ -7,5 +7,5 @@ AWS customer managed policies support up to 5 versions. An identity with `iam:Cr
 The workload is an internal compliance audit collector. It only requires read-only visibility into policy definitions and versions to inspect configurations for compliance drifts.
 
 ### Ground Truth Citation
-- Spencer Gietz (Rhino Security Labs), *AWS IAM Privilege Escalation - Methods and Mitigation*, Method 2: `iam:CreatePolicyVersion`.
+- Spencer Gietzen (Rhino Security Labs), [AWS IAM Privilege Escalation – Methods and Mitigation](https://rhinosecuritylabs.com/aws/aws-privilege-escalation-methods-mitigation/), Method 1: `iam:CreatePolicyVersion`.
 - Bishop Fox, *Privilege Escalation in the Cloud: From Zero to AWS Administrator*.

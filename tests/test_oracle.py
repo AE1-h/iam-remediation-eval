@@ -94,7 +94,7 @@ class TestDeterministicOracle(unittest.TestCase):
                     "Action": "iam:CreateAccessKey",
                     "Resource": "arn:aws:iam::123456789012:user/*",
                     "Condition": {
-                        "StringEquals": {"aws:username": "${aws:username}"}
+                        "StringEquals": {"aws:username": "alice"}
                     }
                 }
             ],
@@ -110,7 +110,7 @@ class TestDeterministicOracle(unittest.TestCase):
                 PermissionCheck(
                     action="iam:CreateAccessKey",
                     resource="arn:aws:iam::123456789012:user/alice",
-                    context={"aws:username": "${aws:username}"}
+                    context={"aws:username": "alice"}
                 )
             ]
         )

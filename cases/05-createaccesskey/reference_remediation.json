@@ -2,11 +2,13 @@
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "SelfInspectOnly",
+      "Sid": "SelfKeyRotationOnly",
       "Effect": "Allow",
       "Action": [
         "iam:GetUser",
-        "iam:ListAccessKeys"
+        "iam:ListAccessKeys",
+        "iam:CreateAccessKey",
+        "iam:DeleteAccessKey"
       ],
       "Resource": "arn:aws:iam::123456789012:user/app-worker"
     }

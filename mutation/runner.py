@@ -111,7 +111,7 @@ def run_mutation_suite(repo_root: Path) -> List[MutationResult]:
                     "Action": ["iam:CreateAccessKey"],
                     "Resource": "arn:aws:iam::123456789012:user/*",
                     "Condition": {
-                        "StringEquals": {"aws:username": "${aws:username}"}
+                        "StringEquals": {"aws:username": "alice"}
                     }
                 }
             ]
@@ -128,13 +128,40 @@ def run_mutation_suite(repo_root: Path) -> List[MutationResult]:
             PermissionCheck(
                 action="iam:CreateAccessKey",
                 resource="arn:aws:iam::123456789012:user/alice",
-                context={"aws:username": "${aws:username}"},
+                context={"aws:username": "alice"},
                 description="Permitted when context matches condition"
             )
         ]
     )
 
     probe_suite = [explicit_deny_case, empty_policy_case, condition_scoped_case]
+    def aws_probe(name, statement, deny, allow):
+        return TestCase(name, name, "aws", {"Statement": [statement]}, deny, allow)
+
+    base = {"Effect": "Allow", "Action": "s3:GetObject", "Resource": "*"}
+    probe_suite.extend([
+        aws_probe("probe_action_case", {**base, "Action": "S3:getobject"},
+                  [], [PermissionCheck("s3:GetObject", "*")]),
+        aws_probe("probe_literal_brackets", {**base, "Resource": "arn:aws:s3:::bucket/[ab]"},
+                  [PermissionCheck("s3:GetObject", "arn:aws:s3:::bucket/a")],
+                  [PermissionCheck("s3:GetObject", "arn:aws:s3:::bucket/[ab]")]),
+        aws_probe("probe_unsupported_condition", {**base, "Condition": {"Bool": {"aws:SecureTransport": "true"}}},
+                  [], [PermissionCheck("s3:GetObject", "*", context={"aws:SecureTransport": "true"})]),
+        aws_probe("probe_negated_condition_values", {**base, "Condition": {"StringNotEquals": {"aws:username": ["alice", "bob"]}}},
+                  [PermissionCheck("s3:GetObject", "*", context={"aws:username": "alice"})],
+                  [PermissionCheck("s3:GetObject", "*", context={"aws:username": "carol"})]),
+        TestCase("probe_gcp_member", "GCP identity scoping", "gcp",
+                 {"bindings": [{"role": "roles/cloudfunctions.viewer", "members": ["user:alice@example.com"]}]},
+                 [PermissionCheck("cloudfunctions.functions.get", "*", context={"member": "user:bob@example.com"})],
+                 [PermissionCheck("cloudfunctions.functions.get", "*", context={"member": "user:alice@example.com"})]),
+    ])
+    # Independent expectations prevent a shared defect passing comparison alone.
+    for probe in probe_suite:
+        expected = (VerdictStatus.INVALID if probe.case_id == "probe_unsupported_condition"
+                    else VerdictStatus.BROKEN if probe is empty_policy_case else VerdictStatus.CORRECT)
+        actual = ref_oracle.evaluate(probe.initial_policy, probe)
+        if actual.verdict != expected:
+            raise AssertionError(f"Reference engine fails {probe.case_id}: {actual.verdict} != {expected}")
 
     results: List[MutationResult] = []
 
@@ -148,7 +175,7 @@ def run_mutation_suite(repo_root: Path) -> List[MutationResult]:
         for case in cases:
             res = mutant.evaluate(case.initial_policy, case)
             ref_res = ref_oracle.evaluate(case.initial_policy, case)
-            if res.verdict != ref_res.verdict or res.is_safe != ref_res.is_safe:
+            if res.verdict != ref_res.verdict or res.is_safe != ref_res.is_safe or res.is_intact != ref_res.is_intact:
                 killed = True
                 killing_test = f"{case.case_id} [initial_policy]"
                 detail = f"Oracle verdict {ref_res.verdict.value} != Mutant verdict {res.verdict.value}"

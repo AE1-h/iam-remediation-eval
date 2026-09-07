@@ -3,7 +3,6 @@ Deterministic IAM policy evaluator.
 Performs exact set logic over actions, resources, and conditions without calling any LLM.
 """
 
-import fnmatch
 import json
 import re
 from typing import Any, Dict, List, Optional, Tuple, Union
@@ -67,49 +66,74 @@ def _match_wildcard(pattern: str, value: str, case_sensitive: bool = False) -> b
 
     if p == "*":
         return True
-    return fnmatch.fnmatchcase(v, p)
+    # IAM supports * and ?, not shell character classes such as [abc].
+    expression = re.escape(p).replace(r"\*", ".*").replace(r"\?", ".")
+    return re.fullmatch(expression, v, flags=re.DOTALL) is not None
+
+
+SUPPORTED_CONDITION_OPERATORS = frozenset({
+    "StringEquals", "StringLike", "StringNotEquals", "ArnEquals", "ArnLike",
+})
+
+
+def _load_policy_json(raw: str) -> Any:
+    def unique_object(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f"Duplicate JSON key: {key}")
+            result[key] = value
+        return result
+
+    def invalid_constant(value):
+        raise ValueError(f"Non-JSON constant: {value}")
+
+    return json.loads(raw, object_pairs_hook=unique_object, parse_constant=invalid_constant)
+
+
+def _validate_condition(condition_block: Any) -> None:
+    """Reject unsupported semantics before evaluating any statement or request."""
+    if not isinstance(condition_block, dict):
+        raise ValueError("Condition must be an object")
+    for operator, key_values in condition_block.items():
+        if operator not in SUPPORTED_CONDITION_OPERATORS:
+            raise ValueError(f"Unsupported condition operator: {operator}")
+        if not isinstance(key_values, dict) or not key_values:
+            raise ValueError(f"{operator} must contain a nonempty condition-key object")
+        for key, value in key_values.items():
+            if not isinstance(key, str) or not key:
+                raise ValueError("Condition keys must be nonempty strings")
+            values = value if isinstance(value, list) else [value]
+            if not values or any(not isinstance(v, str) for v in values):
+                raise ValueError("Supported condition values must be strings or nonempty string arrays")
+            if any("${" in v for v in values):
+                raise ValueError("Policy variable substitution is unsupported")
 
 
 def _check_condition(condition_block: Dict[str, Any], context: Dict[str, Any]) -> bool:
     """
     Evaluates statement conditions against request context.
     If conditions are present in the statement, context must satisfy them.
-    If context lacks required keys, condition fails.
+    Missing keys fail positive comparisons and satisfy StringNotEquals.
     """
-    if not condition_block:
-        return True
-
+    _validate_condition(condition_block)
+    normalized_context = {key.lower(): value for key, value in context.items()}
     for operator, key_values in condition_block.items():
-        op = operator.lower()
-        if not isinstance(key_values, dict):
-            continue
-
         for req_key, expected_val in key_values.items():
-            actual_val = context.get(req_key)
+            actual_val = normalized_context.get(req_key.lower())
             if actual_val is None:
+                if operator == "StringNotEquals":
+                    continue
                 return False
-
+            if not isinstance(actual_val, str):
+                raise ValueError("Only scalar string condition context is supported")
             expected_list = expected_val if isinstance(expected_val, list) else [expected_val]
-            actual_list = actual_val if isinstance(actual_val, list) else [actual_val]
-
-            matched = False
-            for act in actual_list:
-                for exp in expected_list:
-                    if "stringequals" in op or "arnequals" in op:
-                        if str(act) == str(exp):
-                            matched = True
-                            break
-                    elif "stringlike" in op or "arnlike" in op:
-                        if _match_wildcard(str(exp), str(act), case_sensitive=True):
-                            matched = True
-                            break
-                    elif "stringnotequals" in op:
-                        if str(act) != str(exp):
-                            matched = True
-                            break
-                if matched:
-                    break
-
+            if operator == "StringEquals":
+                matched = actual_val in expected_list
+            elif operator == "StringNotEquals":
+                matched = actual_val not in expected_list
+            else:
+                matched = any(_match_wildcard(exp, actual_val, case_sensitive=True) for exp in expected_list)
             if not matched:
                 return False
 
@@ -120,7 +144,7 @@ def parse_aws_policy(raw: Union[str, Dict[str, Any]]) -> Tuple[Optional[IAMPolic
     """Parses and validates an AWS IAM policy structure."""
     if isinstance(raw, str):
         try:
-            data = json.loads(raw)
+            data = _load_policy_json(raw)
         except Exception as e:
             return None, f"JSON parse error: {e}"
     elif isinstance(raw, dict):
@@ -133,6 +157,10 @@ def parse_aws_policy(raw: Union[str, Dict[str, Any]]) -> Tuple[Optional[IAMPolic
 
     if "Statement" not in data:
         return None, "Policy missing required key 'Statement'."
+    if set(data) - {"Version", "Id", "Statement"}:
+        return None, "Unsupported AWS policy root fields"
+    if "Version" in data and data["Version"] not in ("2008-10-17", "2012-10-17"):
+        return None, "Unsupported AWS policy Version"
 
     raw_statements = data["Statement"]
     if isinstance(raw_statements, dict):
@@ -144,30 +172,32 @@ def parse_aws_policy(raw: Union[str, Dict[str, Any]]) -> Tuple[Optional[IAMPolic
     for idx, stmt in enumerate(raw_statements):
         if not isinstance(stmt, dict):
             return None, f"Statement at index {idx} must be a dictionary."
+        if set(stmt) - {"Sid", "Effect", "Action", "Resource", "Condition"}:
+            return None, f"Statement {idx}: unsupported fields (including Principal/NotAction/NotResource)"
+        if not isinstance(stmt.get("Sid", f"Stmt{idx}"), str) or not stmt.get("Sid", f"Stmt{idx}"):
+            return None, f"Statement {idx}: Sid must be a nonempty string"
+        for field in ("Action", "Resource"):
+            value = stmt.get(field)
+            values = value if isinstance(value, list) else [value]
+            if not values or any(not isinstance(v, str) or not v for v in values):
+                return None, f"Statement {idx}: {field} requires a nonempty string or string array"
+            if any("${" in v for v in values):
+                return None, f"Statement {idx}: policy variable substitution is unsupported"
 
         effect = stmt.get("Effect")
         if effect not in ("Allow", "Deny"):
             return None, f"Statement at index {idx} has invalid Effect: '{effect}'. Must be 'Allow' or 'Deny'."
 
-        raw_action = stmt.get("Action", [])
-        if isinstance(raw_action, str):
-            actions = [raw_action]
-        elif isinstance(raw_action, list):
-            actions = [str(a) for a in raw_action]
-        else:
-            return None, f"Statement at index {idx} has invalid Action type."
-
-        raw_res = stmt.get("Resource", "*")
-        if isinstance(raw_res, str):
-            resources = [raw_res]
-        elif isinstance(raw_res, list):
-            resources = [str(r) for r in raw_res]
-        else:
-            return None, f"Statement at index {idx} has invalid Resource type."
+        raw_action = stmt["Action"]
+        actions = [raw_action] if isinstance(raw_action, str) else list(raw_action)
+        raw_res = stmt["Resource"]
+        resources = [raw_res] if isinstance(raw_res, str) else list(raw_res)
 
         conditions = stmt.get("Condition", {})
-        if not isinstance(conditions, dict):
-            conditions = {}
+        try:
+            _validate_condition(conditions)
+        except ValueError as exc:
+            return None, f"Statement {idx}: {exc}"
 
         sid = stmt.get("Sid", f"Stmt{idx}")
 
@@ -244,13 +274,13 @@ def evaluate_gcp_action(
         members = binding.get("members", [])
 
         # Check member
-        if user_principal != "*" and not any(m in ("allUsers", "allAuthenticatedUsers", user_principal) or _match_wildcard(m, user_principal) for m in members):
+        if user_principal not in members:
             continue
 
         # Get role permissions
         perms = GCP_ROLE_PERMISSIONS.get(role, [])
         for perm in perms:
-            if _match_wildcard(perm, check.action, case_sensitive=False):
+            if _match_wildcard(perm, check.action, case_sensitive=True):
                 return True, role, f"Allowed by GCP role '{role}'"
 
     return False, None, "GCP implicit deny: no role binding permits this action"
@@ -265,13 +295,31 @@ class DeterministicOracle:
         pass
 
     def evaluate(self, proposed_policy: Union[str, Dict[str, Any]], case: TestCase) -> EvaluationResult:
+        try:
+            return self._evaluate(proposed_policy, case)
+        except ValueError as exc:
+            return EvaluationResult(case_id=case.case_id, verdict=VerdictStatus.INVALID,
+                                    is_safe=False, is_intact=False, error_message=str(exc))
+
+    def _evaluate(self, proposed_policy: Union[str, Dict[str, Any]], case: TestCase) -> EvaluationResult:
         case_id = case.case_id
+        if case.cloud not in {"aws", "gcp"}:
+            raise ValueError(f"Unsupported cloud: {case.cloud}")
+        for check in case.must_allow + case.must_deny:
+            if not isinstance(check.action, str) or not check.action or not isinstance(check.resource, str) or not check.resource:
+                raise ValueError("Requests require nonempty action and resource strings")
+            if not isinstance(check.context, dict) or any(not isinstance(k, str) or not isinstance(v, str) for k, v in check.context.items()):
+                raise ValueError("Only scalar string request context is supported")
+            if len({k.lower() for k in check.context}) != len(check.context):
+                raise ValueError("Ambiguous condition context keys differing only in case")
+            if case.cloud == "gcp" and (not check.context.get("member") or check.context["member"] == "*"):
+                raise ValueError("GCP checks require an explicit member")
 
         # Schema / Parse check
         if case.cloud == "gcp":
             if isinstance(proposed_policy, str):
                 try:
-                    data = json.loads(proposed_policy)
+                    data = _load_policy_json(proposed_policy)
                 except Exception as e:
                     return EvaluationResult(
                         case_id=case_id,
@@ -291,7 +339,7 @@ class DeterministicOracle:
                     error_message="Policy must be dict or JSON string",
                 )
 
-            if "bindings" not in data or not isinstance(data["bindings"], list):
+            if not isinstance(data, dict) or "bindings" not in data or not isinstance(data["bindings"], list):
                 return EvaluationResult(
                     case_id=case_id,
                     verdict=VerdictStatus.INVALID,
@@ -300,6 +348,19 @@ class DeterministicOracle:
                     error_message="GCP policy must have 'bindings' array.",
                 )
 
+            if set(data) - {"bindings", "version", "etag"}:
+                raise ValueError("Unsupported GCP policy fields")
+            for binding in data["bindings"]:
+                if not isinstance(binding, dict) or set(binding) != {"role", "members"}:
+                    raise ValueError("GCP bindings require role and members; conditions and other fields are unsupported")
+                if not isinstance(binding["role"], str) or binding["role"] not in GCP_ROLE_PERMISSIONS:
+                    raise ValueError(f"Unsupported GCP role: {binding['role']}")
+                members = binding["members"]
+                if not isinstance(members, list) or not members or any(
+                    not isinstance(m, str) or not m.startswith(("user:", "serviceAccount:"))
+                    or not m.split(":", 1)[1] or "*" in m or "?" in m for m in members
+                ):
+                    raise ValueError("GCP members must be explicit user: or serviceAccount: identities")
             parsed_policy = data
         else:
             # AWS

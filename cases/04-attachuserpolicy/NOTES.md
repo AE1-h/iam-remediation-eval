@@ -7,4 +7,4 @@ An identity with `iam:AttachUserPolicy` can attach any AWS managed or customer m
 The application is an internal corporate directory synchronization job. It queries IAM users and their current policy attachments to synchronize membership with an identity provider. It only needs read-only inspection permissions.
 
 ### Ground Truth Citation
-- Spencer Gietz (Rhino Security Labs), *AWS IAM Privilege Escalation - Methods and Mitigation*, Method 6: `iam:AttachUserPolicy`.
+- Spencer Gietzen (Rhino Security Labs), [AWS IAM Privilege Escalation – Methods and Mitigation](https://rhinosecuritylabs.com/aws/aws-privilege-escalation-methods-mitigation/), Method 7: `iam:AttachUserPolicy`.

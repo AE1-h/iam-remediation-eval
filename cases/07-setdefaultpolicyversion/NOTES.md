@@ -7,4 +7,4 @@ When an IAM policy is revised to least privilege, older policy versions often re
 The application is a read-only policy inventory collector that monitors the active configuration of IAM policies across the organization.
 
 ### Ground Truth Citation
-- Spencer Gietz (Rhino Security Labs), *AWS IAM Privilege Escalation - Methods and Mitigation*, Method 3: `iam:SetDefaultPolicyVersion`.
+- Spencer Gietzen (Rhino Security Labs), [AWS IAM Privilege Escalation – Methods and Mitigation](https://rhinosecuritylabs.com/aws/aws-privilege-escalation-methods-mitigation/), Method 2: `iam:SetDefaultPolicyVersion`.

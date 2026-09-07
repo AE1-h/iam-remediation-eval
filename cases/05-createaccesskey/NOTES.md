@@ -1,11 +1,12 @@
 # Escalation Vector: iam:CreateAccessKey
 
 ### Mechanism
-An identity with `iam:CreateAccessKey` without a condition scoping the action to their own username (`aws:username`) can generate an API access key and secret for ANY other IAM user in the AWS account, including the root user or accounts in the `Admins` group. The attacker retrieves the newly minted access credentials and logs in as the targeted privileged user.
+An identity with unscoped `iam:CreateAccessKey` can create credentials for another IAM user, subject to that user's access-key limit and effective permissions. The target's privileges determine the impact. This does not let an ordinary IAM user create root credentials. Scoping Resource to the worker's own user ARN preserves self-service key creation without granting access to other users.
 
 ### Legitimate Workload Purpose
-The workload is an automated credential rotation utility meant to allow individual service workers to rotate their own credentials periodically, but it was erroneously configured with a wildcard on all users in the account.
+The workload creates a replacement key for `app-worker`, verifies it outside this policy model, and deletes the old key. It also inspects its user and lists its keys. The original wildcard permits these operations on other users. The reference retains all four operations only on `app-worker`. The oracle tests permissions, not the rotation sequence or key quotas.
 
 ### Ground Truth Citation
-- Spencer Gietz (Rhino Security Labs), *AWS IAM Privilege Escalation - Methods and Mitigation*, Method 7: `iam:CreateAccessKey`.
+- Spencer Gietzen (Rhino Security Labs), [AWS IAM Privilege Escalation – Methods and Mitigation](https://rhinosecuritylabs.com/aws/aws-privilege-escalation-methods-mitigation/), Method 4: creating a new user access key.
+- AWS [CreateAccessKey API](https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateAccessKey.html) and [root access-key prerequisites](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user_manage_add-key.html).
 - CIS AWS Foundations Benchmark, Section 1: Identity and Access Management.
