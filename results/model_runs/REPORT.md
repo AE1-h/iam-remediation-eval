@@ -37,9 +37,17 @@ Two observations, stated as observations rather than conclusions:
    exist — the real equivalents are `roles/viewer` or `roles/browser`.
 2. **The oracle flagged these, it did not diagnose them.** `INVALID —
    Unsupported GCP role` is returned both for a hallucinated role and for a real
-   role this evaluator does not model. The two above were confirmed non-existent
-   by hand against Google's role reference, not by the oracle. Do not read the
-   invalid column as proof of hallucination without that manual step.
+   role this evaluator does not model. Every proposed role was therefore checked
+   by hand against Google's published role reference on 8 September 2026; the
+   inventories and sources are recorded in
+   [gcp_role_verification.md](gcp_role_verification.md). All four proposed
+   identifiers are absent from that reference. Do not read the invalid column as
+   proof of hallucination without that manual step.
+3. **`roles/resourcemanager.projectViewer` is a pattern completion, not noise.**
+   The namespace really does contain `resourcemanager.folderViewer` and
+   `resourcemanager.organizationViewer`. It has no `projectViewer`. Two of the
+   three models independently filled the one gap in an otherwise regular naming
+   scheme. The correct read-only equivalent is the basic role `roles/viewer`.
 
 ## Why 8/8 on AWS is a weak result, including for the 3B model
 
