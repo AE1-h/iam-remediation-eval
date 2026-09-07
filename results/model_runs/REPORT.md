@@ -58,9 +58,59 @@ all three models failed and where the scores separate from transcription.
 least-privilege reasoning.** Treat the AWS column as a floor, not a capability
 estimate.
 
+## Second condition: prose workload, both axes held out
+
+The run above was repeated with the workload given as a hand-written prose
+description instead of exact action/resource pairs. The descriptions name no API
+actions and are committed as `cases/*/workload_prose.md`. `NOTES.md` is still
+never used as model input: its workload paragraphs were written for human readers
+and in several cases reveal the escalation path or the reference answer.
+
+| Model | Workload | Correct | Unsafe | Broken | Invalid |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| `ministral-14b-latest` | structured | 8 | 0 | 0 | 2 |
+| `ministral-14b-latest` | **prose** | 7 | 0 | **1** | 2 |
+| `ministral-8b-latest` | structured | 8 | 0 | 0 | 2 |
+| `ministral-8b-latest` | **prose** | 6 | 0 | **2** | 2 |
+| `ministral-3b-latest` | structured | 8 | 0 | 0 | 2 |
+| `ministral-3b-latest` | **prose** | 7 | 0 | 0 | **3** |
+
+**The broken column is zero in every structured run and non-zero in prose.** That
+is the measurement the structured design suppresses: when the model is handed the
+exact pairs it will be graded on, preserving them is transcription. The correct
+rate fell for all three models once it had to infer them.
+
+Every broken result is the same failure, and it is a specific one:
+
+| Model | Case | Permission dropped |
+| :--- | :--- | :--- |
+| `ministral-14b` | 07 | `iam:GetPolicyVersion` on `EngineeringPolicy` |
+| `ministral-8b` | 07 | `iam:GetPolicyVersion` on `EngineeringPolicy` |
+| `ministral-8b` | 02 | `iam:GetPolicy` on `ComplianceAuditRolePolicy` |
+
+In each, the model kept the permission that lists policy versions but removed the
+one that reads a version document. The resulting policy looks plausible and
+deploys cleanly; the workload then fails at runtime when it tries to fetch a
+document it can enumerate but cannot open. Under-provisioned read paths of this
+kind are not visible at review time, which is what makes them worth measuring.
+
+No unsafe verdicts appeared in either condition. On these ten cases these models
+did not leave an escalation path open; they failed by removing too much, or on
+GCP by naming roles that do not exist.
+
+## Standing caveats
+
+- Ten public cases, no hidden split, no statistically supported ranking. Score
+  differences of one case are not model rankings.
+- GCP is 2 of 10 cases and accounts for every invalid verdict in both conditions.
+  The GCP failure is independent of how the workload is described.
+- The prose descriptions are hand-written by the repository author. They are a
+  deliberate rewrite, not a neutral corpus, and a different phrasing would
+  plausibly move these numbers.
+
 ## What would make the next run informative
 
-- Describe the workload in prose instead of exact action/resource pairs, and
-  compare the broken rate. That is the measurement the current design suppresses.
-- Hold out `must_allow` from the prompt entirely for a third condition.
-- Add GCP cases, which are currently 2 of 10 and are the only cases producing signal.
+- Add GCP cases. They are 2 of 10 and produce the only cross-condition signal.
+- Hold out `must_allow` entirely, describing only the business outcome.
+- Re-run at a non-zero temperature to see whether the case-07 read-path failure
+  is stable or a single decoding path.

@@ -1,0 +1,1 @@
+An access-review tool. It enumerates the IAM users in the account and, for the user alice, reads her user record and the managed policies currently attached to her, to produce a quarterly access report.

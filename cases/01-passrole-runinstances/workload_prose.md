@@ -1,0 +1,1 @@
+A fleet-monitoring script. It builds an inventory of the EC2 instances in the account, and during maintenance windows it powers the single worker instance i-0123456789abcdef0 in us-east-1 off and then on again.

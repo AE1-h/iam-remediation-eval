@@ -1,0 +1,1 @@
+A compliance reporting job. It reads the managed policy ComplianceAuditRolePolicy, enumerates the versions that exist for it, and fetches individual version documents, so it can record which version is currently live.

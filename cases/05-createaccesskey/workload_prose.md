@@ -1,0 +1,1 @@
+A credential-rotation service running as the IAM user app-worker. It issues itself a fresh access key, removes the superseded key once the new one is confirmed working, and reads its own user record and its own list of keys to know what it currently holds.

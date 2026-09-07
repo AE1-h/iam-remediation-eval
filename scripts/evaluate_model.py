@@ -22,6 +22,8 @@ def main():
     parser.add_argument("--config", required=True, help="JSON object documenting generation parameters")
     parser.add_argument("--output", required=True, type=Path, help="New run directory (must not already exist)")
     parser.add_argument("--timeout", type=float, default=120)
+    parser.add_argument("--workload-style", choices=("structured", "prose"), default="structured",
+                        help="structured discloses must_allow pairs; prose holds them out")
     parser.add_argument("--command", nargs=argparse.REMAINDER, required=True)
     args = parser.parse_args()
     if not args.command or args.timeout <= 0:
@@ -43,7 +45,9 @@ def main():
                 "model_identity_source": "caller_declared", "generation_config": config,
                 "command": args.command, "revision": revision, "dirty_worktree": dirty,
                 "input_file_sha256": hashes, "started_at": datetime.now(timezone.utc).isoformat(),
-                "workload_checks_disclosed": True, "reference_policy_in_prompt": False,
+                "workload_style": args.workload_style,
+                "workload_checks_disclosed": args.workload_style == "structured",
+                "reference_policy_in_prompt": False,
                 "must_deny_in_prompt": False, "case_count": len(cases), "status": "running"}
     metadata["timeout_seconds"] = args.timeout
     metadata_path = args.output / "metadata.json"
@@ -51,7 +55,7 @@ def main():
     failed = 0
     with (args.output / "records.jsonl").open("w") as records:
         for case in cases:
-            request = build_request(case)
+            request = build_request(case, args.workload_style)
             record = {"case_id": case.case_id, "request": request, "request_sha256": request_digest(request)}
             try:
                 raw = invoke(args.command, request, args.timeout)

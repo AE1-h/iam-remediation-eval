@@ -9,3 +9,8 @@ dist/
 build/
 .venv/
 env/
+
+# Credential files must never enter this repository
+*.key
+.mistral_key
+*api*key*

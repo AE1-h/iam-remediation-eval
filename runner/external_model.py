@@ -13,10 +13,22 @@ from dataclasses import asdict
 from runner.prompt import SYSTEM_PROMPT, format_remediation_prompt
 
 
-def build_request(case):
+def build_request(case, workload_style="structured"):
     # Deliberately do not read NOTES.md, must_deny, or reference_remediation.
-    # The workload is disclosed as structured requirements, not held-out tests.
-    workload = json.dumps([asdict(check) for check in case.must_allow], indent=2)
+    #
+    # "structured" discloses must_allow as exact action/resource pairs, so the
+    # workload axis is not held out and the broken rate is a lower bound.
+    # "prose" substitutes a hand-written description of what the workload does,
+    # naming no API actions, so the model must infer the required permissions
+    # and both axes are held out. NOTES.md is still never read: its workload
+    # paragraphs were written for human readers and in several cases reveal the
+    # escalation path or the reference answer.
+    if workload_style == "prose":
+        workload = (case.directory / "workload_prose.md").read_text(encoding="utf-8").strip()
+    elif workload_style == "structured":
+        workload = json.dumps([asdict(check) for check in case.must_allow], indent=2)
+    else:
+        raise ValueError(f"Unknown workload_style: {workload_style}")
     return {"messages": [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": format_remediation_prompt(json.dumps(case.initial_policy, indent=2), workload)},
