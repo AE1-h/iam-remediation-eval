@@ -7,57 +7,15 @@ import json
 import re
 from typing import Any, Dict, List, Optional, Tuple, Union
 
+from oracle.gcp_roles import GCP_ROLE_DATA_META, GCP_ROLE_META, GCP_ROLE_PERMISSIONS
 from oracle.models import IAMPolicy, PermissionCheck, Statement, TestCase
 from oracle.verdict import CheckDetail, EvaluationResult, VerdictStatus
 
-# GCP Role to Permission Mapping for common escalation / least-privilege roles
-GCP_ROLE_PERMISSIONS: Dict[str, List[str]] = {
-    "roles/owner": ["*"],
-    "roles/editor": [
-        "resourcemanager.projects.get",
-        "cloudfunctions.functions.*",
-        "iam.serviceAccounts.actAs",
-        "iam.serviceAccounts.get",
-        "compute.*",
-        "storage.*",
-    ],
-    "roles/viewer": [
-        "resourcemanager.projects.get",
-        "resourcemanager.projects.getIamPolicy",
-        "cloudfunctions.functions.get",
-        "cloudfunctions.functions.list",
-        "iam.serviceAccounts.get",
-        "iam.serviceAccounts.list",
-        "storage.buckets.get",
-        "storage.objects.get",
-        "storage.objects.list",
-    ],
-    "roles/resourcemanager.projectIamAdmin": [
-        "resourcemanager.projects.get",
-        "resourcemanager.projects.getIamPolicy",
-        "resourcemanager.projects.setIamPolicy",
-    ],
-    "roles/iam.serviceAccountUser": [
-        "iam.serviceAccounts.actAs",
-        "iam.serviceAccounts.get",
-    ],
-    "roles/cloudfunctions.developer": [
-        "cloudfunctions.functions.create",
-        "cloudfunctions.functions.update",
-        "cloudfunctions.functions.delete",
-        "cloudfunctions.functions.get",
-        "cloudfunctions.functions.list",
-        "cloudfunctions.functions.invoke",
-    ],
-    "roles/cloudfunctions.viewer": [
-        "cloudfunctions.functions.get",
-        "cloudfunctions.functions.list",
-    ],
-    "roles/cloudfunctions.invoker": [
-        "cloudfunctions.functions.invoke",
-    ],
-}
-
+# GCP role data is loaded in oracle.gcp_roles so that path resolution does not
+# run inside the mutation harness's __file__-less namespace. Predefined roles
+# hold Google's published permission lists; basic roles stay flagged
+# approximations. A role absent from the data is INVALID, meaning unmodelled
+# rather than non-existent.
 
 def _match_wildcard(pattern: str, value: str, case_sensitive: bool = False) -> bool:
     """Matches strings against wildcard patterns like s3:* or arn:aws:s3:::bucket/*."""

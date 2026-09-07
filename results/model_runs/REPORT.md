@@ -122,3 +122,18 @@ GCP by naming roles that do not exist.
 - Hold out `must_allow` entirely, describing only the business outcome.
 - Re-run at a non-zero temperature to see whether the case-07 read-path failure
   is stable or a single decoding path.
+
+## Regrade after the role data was grounded
+
+On 8 September 2026 the oracle's GCP role map was replaced with permission lists
+read from Google's published reference, expanding `roles/cloudfunctions.viewer`
+from 2 modelled permissions to 126 and `roles/resourcemanager.projectIamAdmin`
+from 3 to 10. All 60 recorded model outputs above were re-graded against the
+grounded data: **no verdict changed.**
+
+That is the expected result rather than a disappointing one. The hand-written
+approximations happened to agree with the real lists on the specific permissions
+these ten cases test, so grounding the data improves generality for future cases
+and other roles without correcting any published number here. The two GCP cases
+remain invalid because the roles the models proposed are absent from Google's
+reference entirely, which no amount of grounding changes.
