@@ -1,0 +1,26 @@
+[
+  {
+    "description": "Operator enumerates service accounts for the ownership report",
+    "action": "iam.serviceAccounts.list",
+    "resource": "projects/my-prod-project/serviceAccounts",
+    "context": {
+      "member": "user:sa-operator@example.com"
+    }
+  },
+  {
+    "description": "Operator reads service account metadata",
+    "action": "iam.serviceAccounts.get",
+    "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "user:sa-operator@example.com"
+    }
+  },
+  {
+    "description": "Operator reads the bindings on each service account",
+    "action": "iam.serviceAccounts.getIamPolicy",
+    "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "user:sa-operator@example.com"
+    }
+  }
+]

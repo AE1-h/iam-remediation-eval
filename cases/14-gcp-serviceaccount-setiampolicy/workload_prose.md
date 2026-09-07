@@ -1,0 +1,1 @@
+An ownership reporter for the project my-prod-project. It lists the service accounts, reads the description and disabled state of each, and reads the principals bound to each one, so that an owner can be identified for every account. It does not modify anything.

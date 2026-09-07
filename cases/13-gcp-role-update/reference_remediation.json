@@ -1,0 +1,10 @@
+{
+  "bindings": [
+    {
+      "role": "roles/iam.roleViewer",
+      "members": [
+        "user:platform-reviewer@example.com"
+      ]
+    }
+  ]
+}

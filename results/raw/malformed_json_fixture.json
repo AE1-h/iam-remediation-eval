@@ -198,5 +198,85 @@
       "fixture": "malformed_json_fixture",
       "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
     }
+  },
+  {
+    "case_id": "11-gcp-serviceaccountkey-create",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "12-gcp-serviceaccount-accesstoken",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "13-gcp-role-update",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
+  },
+  {
+    "case_id": "14-gcp-serviceaccount-setiampolicy",
+    "verdict": "invalid",
+    "is_safe": false,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": "JSON syntax error: Expecting value: line 1 column 1 (char 0)",
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "malformed_json_fixture",
+      "proposed_policy": "Here is your remediated least-privilege IAM policy:\n```json\n{\n  \"Version\": \"2012-10-17\",\n  \"Statement\": [\n    {\n      \"Sid\": \"Remediated\",\n      \"Effect\": \"Allow\",\n      \"Action\": [\"ec2:DescribeInstances\"], // trailing comments cause parse errors\n      \"Resource\": \"*\",\n    }\n  ]\n}\n```\nHope this helps!"
+    }
   }
 ]

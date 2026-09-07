@@ -1,0 +1,34 @@
+[
+  {
+    "description": "Mint a short-lived OAuth token for another service account",
+    "action": "iam.serviceAccounts.getAccessToken",
+    "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "serviceAccount:inventory-reporter@my-prod-project.iam.gserviceaccount.com"
+    }
+  },
+  {
+    "description": "Sign a JWT as another service account to obtain its identity",
+    "action": "iam.serviceAccounts.signJwt",
+    "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "serviceAccount:inventory-reporter@my-prod-project.iam.gserviceaccount.com"
+    }
+  },
+  {
+    "description": "Chain delegation through another service account",
+    "action": "iam.serviceAccounts.implicitDelegation",
+    "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "serviceAccount:inventory-reporter@my-prod-project.iam.gserviceaccount.com"
+    }
+  },
+  {
+    "description": "Act as another service account, an impersonation primitive in its own right",
+    "action": "iam.serviceAccounts.actAs",
+    "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "serviceAccount:inventory-reporter@my-prod-project.iam.gserviceaccount.com"
+    }
+  }
+]

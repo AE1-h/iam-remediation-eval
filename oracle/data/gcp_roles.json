@@ -11,224 +11,6 @@
   "warning": "A role absent from this file is reported INVALID by the oracle. That means unmodelled, not non-existent."
  },
  "roles": {
-  "roles/resourcemanager.projectIamAdmin": {
-   "permissions": [
-    "iam.policybindings.*",
-    "iam.policybindings.get",
-    "iam.policybindings.list",
-    "resourcemanager.projects.createPolicyBinding",
-    "resourcemanager.projects.deletePolicyBinding",
-    "resourcemanager.projects.get",
-    "resourcemanager.projects.getIamPolicy",
-    "resourcemanager.projects.searchPolicyBindings",
-    "resourcemanager.projects.setIamPolicy",
-    "resourcemanager.projects.updatePolicyBinding"
-   ],
-   "verified": true,
-   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
-  },
-  "roles/resourcemanager.projectMover": {
-   "permissions": [
-    "resourcemanager.projects.get",
-    "resourcemanager.projects.move",
-    "resourcemanager.projects.update"
-   ],
-   "verified": true,
-   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
-  },
-  "roles/resourcemanager.folderIamAdmin": {
-   "permissions": [
-    "iam.policybindings.*",
-    "iam.policybindings.get",
-    "iam.policybindings.list",
-    "resourcemanager.folders.createPolicyBinding",
-    "resourcemanager.folders.deletePolicyBinding",
-    "resourcemanager.folders.get",
-    "resourcemanager.folders.getIamPolicy",
-    "resourcemanager.folders.searchPolicyBindings",
-    "resourcemanager.folders.setIamPolicy",
-    "resourcemanager.folders.updatePolicyBinding"
-   ],
-   "verified": true,
-   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
-  },
-  "roles/resourcemanager.folderViewer": {
-   "permissions": [
-    "essentialcontacts.contacts.get",
-    "essentialcontacts.contacts.list",
-    "orgpolicy.constraints.list",
-    "orgpolicy.policies.list",
-    "orgpolicy.policy.get",
-    "resourcemanager.capabilities.get",
-    "resourcemanager.folders.get",
-    "resourcemanager.folders.list",
-    "resourcemanager.projects.get",
-    "resourcemanager.projects.list"
-   ],
-   "verified": true,
-   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
-  },
-  "roles/resourcemanager.organizationViewer": {
-   "permissions": [
-    "resourcemanager.organizations.get"
-   ],
-   "verified": true,
-   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
-  },
-  "roles/resourcemanager.projectCreator": {
-   "permissions": [
-    "resourcemanager.organizations.get",
-    "resourcemanager.projects.create"
-   ],
-   "verified": true,
-   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
-  },
-  "roles/resourcemanager.projectDeleter": {
-   "permissions": [
-    "resourcemanager.projects.delete"
-   ],
-   "verified": true,
-   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
-  },
-  "roles/cloudfunctions.invoker": {
-   "permissions": [
-    "cloudfunctions.functions.invoke"
-   ],
-   "verified": true,
-   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/cloudfunctions"
-  },
-  "roles/cloudfunctions.viewer": {
-   "permissions": [
-    "cloudasset.assets.searchAllResources",
-    "cloudbuild.builds.get",
-    "cloudbuild.builds.list",
-    "cloudbuild.locations.*",
-    "cloudbuild.locations.get",
-    "cloudbuild.locations.list",
-    "cloudbuild.operations.*",
-    "cloudbuild.operations.get",
-    "cloudbuild.operations.list",
-    "cloudfunctions.functions.get",
-    "cloudfunctions.functions.getIamPolicy",
-    "cloudfunctions.functions.list",
-    "cloudfunctions.locations.list",
-    "cloudfunctions.operations.*",
-    "cloudfunctions.operations.get",
-    "cloudfunctions.operations.list",
-    "eventarc.channelConnections.get",
-    "eventarc.channelConnections.getIamPolicy",
-    "eventarc.channelConnections.list",
-    "eventarc.channelConnections.listEffectiveTags",
-    "eventarc.channelConnections.listTagBindings",
-    "eventarc.channels.get",
-    "eventarc.channels.getIamPolicy",
-    "eventarc.channels.list",
-    "eventarc.channels.listEffectiveTags",
-    "eventarc.channels.listTagBindings",
-    "eventarc.enrollments.get",
-    "eventarc.enrollments.getIamPolicy",
-    "eventarc.enrollments.list",
-    "eventarc.googleApiSources.get",
-    "eventarc.googleApiSources.getIamPolicy",
-    "eventarc.googleApiSources.list",
-    "eventarc.googleChannelConfigs.get",
-    "eventarc.kafkaSources.get",
-    "eventarc.kafkaSources.getIamPolicy",
-    "eventarc.kafkaSources.list",
-    "eventarc.locations.*",
-    "eventarc.locations.get",
-    "eventarc.locations.list",
-    "eventarc.messageBuses.get",
-    "eventarc.messageBuses.getIamPolicy",
-    "eventarc.messageBuses.list",
-    "eventarc.messageBuses.use",
-    "eventarc.multiProjectSources.collectGoogleApiEvents",
-    "eventarc.operations.get",
-    "eventarc.operations.list",
-    "eventarc.pipelines.get",
-    "eventarc.pipelines.getIamPolicy",
-    "eventarc.pipelines.list",
-    "eventarc.providers.*",
-    "eventarc.providers.get",
-    "eventarc.providers.list",
-    "eventarc.triggers.get",
-    "eventarc.triggers.getIamPolicy",
-    "eventarc.triggers.list",
-    "eventarc.triggers.listEffectiveTags",
-    "eventarc.triggers.listTagBindings",
-    "recommender.cloudFunctionsPerformanceInsights.get",
-    "recommender.cloudFunctionsPerformanceInsights.list",
-    "recommender.cloudFunctionsPerformanceRecommendations.get",
-    "recommender.cloudFunctionsPerformanceRecommendations.list",
-    "recommender.locations.*",
-    "recommender.locations.get",
-    "recommender.locations.list",
-    "recommender.runServiceCostInsights.get",
-    "recommender.runServiceCostInsights.list",
-    "recommender.runServiceCostRecommendations.get",
-    "recommender.runServiceCostRecommendations.list",
-    "recommender.runServiceIdentityInsights.get",
-    "recommender.runServiceIdentityInsights.list",
-    "recommender.runServiceIdentityRecommendations.get",
-    "recommender.runServiceIdentityRecommendations.list",
-    "recommender.runServicePerformanceInsights.get",
-    "recommender.runServicePerformanceInsights.list",
-    "recommender.runServicePerformanceRecommendations.get",
-    "recommender.runServicePerformanceRecommendations.list",
-    "recommender.runServiceSecurityInsights.get",
-    "recommender.runServiceSecurityInsights.list",
-    "recommender.runServiceSecurityRecommendations.get",
-    "recommender.runServiceSecurityRecommendations.list",
-    "remotebuildexecution.blobs.get",
-    "resourcemanager.projects.get",
-    "resourcemanager.projects.list",
-    "run.configurations.*",
-    "run.configurations.get",
-    "run.configurations.list",
-    "run.executions.get",
-    "run.executions.list",
-    "run.instances.get",
-    "run.instances.getIamPolicy",
-    "run.instances.list",
-    "run.jobs.get",
-    "run.jobs.getIamPolicy",
-    "run.jobs.list",
-    "run.jobs.listEffectiveTags",
-    "run.jobs.listTagBindings",
-    "run.locations.list",
-    "run.operations.get",
-    "run.operations.list",
-    "run.prompts.get",
-    "run.revisions.get",
-    "run.revisions.list",
-    "run.routes.get",
-    "run.routes.list",
-    "run.services.get",
-    "run.services.getIamPolicy",
-    "run.services.list",
-    "run.services.listEffectiveTags",
-    "run.services.listTagBindings",
-    "run.tasks.*",
-    "run.tasks.get",
-    "run.tasks.list",
-    "run.workerpools.get",
-    "run.workerpools.getIamPolicy",
-    "run.workerpools.list",
-    "serviceusage.consumerpolicy.analyze",
-    "serviceusage.consumerpolicy.get",
-    "serviceusage.effectivepolicy.get",
-    "serviceusage.groups.*",
-    "serviceusage.groups.list",
-    "serviceusage.groups.listExpandedMembers",
-    "serviceusage.groups.listMembers",
-    "serviceusage.quotas.get",
-    "serviceusage.services.get",
-    "serviceusage.services.list",
-    "serviceusage.values.test"
-   ],
-   "verified": true,
-   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/cloudfunctions"
-  },
   "roles/cloudfunctions.developer": {
    "permissions": [
     "artifactregistry.attachments.get",
@@ -491,9 +273,226 @@
    "verified": true,
    "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/cloudfunctions"
   },
-  "roles/iam.serviceAccountUser": {
+  "roles/cloudfunctions.invoker": {
    "permissions": [
+    "cloudfunctions.functions.invoke"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/cloudfunctions"
+  },
+  "roles/cloudfunctions.viewer": {
+   "permissions": [
+    "cloudasset.assets.searchAllResources",
+    "cloudbuild.builds.get",
+    "cloudbuild.builds.list",
+    "cloudbuild.locations.*",
+    "cloudbuild.locations.get",
+    "cloudbuild.locations.list",
+    "cloudbuild.operations.*",
+    "cloudbuild.operations.get",
+    "cloudbuild.operations.list",
+    "cloudfunctions.functions.get",
+    "cloudfunctions.functions.getIamPolicy",
+    "cloudfunctions.functions.list",
+    "cloudfunctions.locations.list",
+    "cloudfunctions.operations.*",
+    "cloudfunctions.operations.get",
+    "cloudfunctions.operations.list",
+    "eventarc.channelConnections.get",
+    "eventarc.channelConnections.getIamPolicy",
+    "eventarc.channelConnections.list",
+    "eventarc.channelConnections.listEffectiveTags",
+    "eventarc.channelConnections.listTagBindings",
+    "eventarc.channels.get",
+    "eventarc.channels.getIamPolicy",
+    "eventarc.channels.list",
+    "eventarc.channels.listEffectiveTags",
+    "eventarc.channels.listTagBindings",
+    "eventarc.enrollments.get",
+    "eventarc.enrollments.getIamPolicy",
+    "eventarc.enrollments.list",
+    "eventarc.googleApiSources.get",
+    "eventarc.googleApiSources.getIamPolicy",
+    "eventarc.googleApiSources.list",
+    "eventarc.googleChannelConfigs.get",
+    "eventarc.kafkaSources.get",
+    "eventarc.kafkaSources.getIamPolicy",
+    "eventarc.kafkaSources.list",
+    "eventarc.locations.*",
+    "eventarc.locations.get",
+    "eventarc.locations.list",
+    "eventarc.messageBuses.get",
+    "eventarc.messageBuses.getIamPolicy",
+    "eventarc.messageBuses.list",
+    "eventarc.messageBuses.use",
+    "eventarc.multiProjectSources.collectGoogleApiEvents",
+    "eventarc.operations.get",
+    "eventarc.operations.list",
+    "eventarc.pipelines.get",
+    "eventarc.pipelines.getIamPolicy",
+    "eventarc.pipelines.list",
+    "eventarc.providers.*",
+    "eventarc.providers.get",
+    "eventarc.providers.list",
+    "eventarc.triggers.get",
+    "eventarc.triggers.getIamPolicy",
+    "eventarc.triggers.list",
+    "eventarc.triggers.listEffectiveTags",
+    "eventarc.triggers.listTagBindings",
+    "recommender.cloudFunctionsPerformanceInsights.get",
+    "recommender.cloudFunctionsPerformanceInsights.list",
+    "recommender.cloudFunctionsPerformanceRecommendations.get",
+    "recommender.cloudFunctionsPerformanceRecommendations.list",
+    "recommender.locations.*",
+    "recommender.locations.get",
+    "recommender.locations.list",
+    "recommender.runServiceCostInsights.get",
+    "recommender.runServiceCostInsights.list",
+    "recommender.runServiceCostRecommendations.get",
+    "recommender.runServiceCostRecommendations.list",
+    "recommender.runServiceIdentityInsights.get",
+    "recommender.runServiceIdentityInsights.list",
+    "recommender.runServiceIdentityRecommendations.get",
+    "recommender.runServiceIdentityRecommendations.list",
+    "recommender.runServicePerformanceInsights.get",
+    "recommender.runServicePerformanceInsights.list",
+    "recommender.runServicePerformanceRecommendations.get",
+    "recommender.runServicePerformanceRecommendations.list",
+    "recommender.runServiceSecurityInsights.get",
+    "recommender.runServiceSecurityInsights.list",
+    "recommender.runServiceSecurityRecommendations.get",
+    "recommender.runServiceSecurityRecommendations.list",
+    "remotebuildexecution.blobs.get",
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.list",
+    "run.configurations.*",
+    "run.configurations.get",
+    "run.configurations.list",
+    "run.executions.get",
+    "run.executions.list",
+    "run.instances.get",
+    "run.instances.getIamPolicy",
+    "run.instances.list",
+    "run.jobs.get",
+    "run.jobs.getIamPolicy",
+    "run.jobs.list",
+    "run.jobs.listEffectiveTags",
+    "run.jobs.listTagBindings",
+    "run.locations.list",
+    "run.operations.get",
+    "run.operations.list",
+    "run.prompts.get",
+    "run.revisions.get",
+    "run.revisions.list",
+    "run.routes.get",
+    "run.routes.list",
+    "run.services.get",
+    "run.services.getIamPolicy",
+    "run.services.list",
+    "run.services.listEffectiveTags",
+    "run.services.listTagBindings",
+    "run.tasks.*",
+    "run.tasks.get",
+    "run.tasks.list",
+    "run.workerpools.get",
+    "run.workerpools.getIamPolicy",
+    "run.workerpools.list",
+    "serviceusage.consumerpolicy.analyze",
+    "serviceusage.consumerpolicy.get",
+    "serviceusage.effectivepolicy.get",
+    "serviceusage.groups.*",
+    "serviceusage.groups.list",
+    "serviceusage.groups.listExpandedMembers",
+    "serviceusage.groups.listMembers",
+    "serviceusage.quotas.get",
+    "serviceusage.services.get",
+    "serviceusage.services.list",
+    "serviceusage.values.test"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/cloudfunctions"
+  },
+  "roles/editor": {
+   "permissions": [
+    "cloudfunctions.functions.*",
+    "compute.*",
     "iam.serviceAccounts.actAs",
+    "iam.serviceAccounts.get",
+    "iam.serviceAccounts.list",
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.list",
+    "storage.*"
+   ],
+   "verified": false,
+   "source": "https://docs.cloud.google.com/iam/docs/understanding-roles#basic",
+   "note": "APPROXIMATION. Basic Editor grants thousands of permissions across all services; only those touching the modelled surface are listed. Do not treat a deny by this entry as evidence Editor lacks a permission."
+  },
+  "roles/iam.roleAdmin": {
+   "permissions": [
+    "iam.roles.*",
+    "iam.roles.create",
+    "iam.roles.createTagBinding",
+    "iam.roles.delete",
+    "iam.roles.deleteTagBinding",
+    "iam.roles.get",
+    "iam.roles.list",
+    "iam.roles.listEffectiveTags",
+    "iam.roles.listTagBindings",
+    "iam.roles.undelete",
+    "iam.roles.update",
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.getIamPolicy"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/iam"
+  },
+  "roles/iam.roleViewer": {
+   "permissions": [
+    "iam.roles.get",
+    "iam.roles.list",
+    "iam.roles.listEffectiveTags",
+    "iam.roles.listTagBindings",
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.getIamPolicy"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/iam"
+  },
+  "roles/iam.serviceAccountAdmin": {
+   "permissions": [
+    "iam.serviceAccountApiKeyBindings.*",
+    "iam.serviceAccountApiKeyBindings.create",
+    "iam.serviceAccountApiKeyBindings.delete",
+    "iam.serviceAccountApiKeyBindings.undelete",
+    "iam.serviceAccounts.create",
+    "iam.serviceAccounts.createTagBinding",
+    "iam.serviceAccounts.delete",
+    "iam.serviceAccounts.deleteTagBinding",
+    "iam.serviceAccounts.disable",
+    "iam.serviceAccounts.enable",
+    "iam.serviceAccounts.get",
+    "iam.serviceAccounts.getIamPolicy",
+    "iam.serviceAccounts.list",
+    "iam.serviceAccounts.listEffectiveTags",
+    "iam.serviceAccounts.listTagBindings",
+    "iam.serviceAccounts.setIamPolicy",
+    "iam.serviceAccounts.undelete",
+    "iam.serviceAccounts.update",
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.list"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/iam"
+  },
+  "roles/iam.serviceAccountKeyAdmin": {
+   "permissions": [
+    "iam.serviceAccountKeys.*",
+    "iam.serviceAccountKeys.create",
+    "iam.serviceAccountKeys.delete",
+    "iam.serviceAccountKeys.disable",
+    "iam.serviceAccountKeys.enable",
+    "iam.serviceAccountKeys.get",
+    "iam.serviceAccountKeys.list",
     "iam.serviceAccounts.get",
     "iam.serviceAccounts.list",
     "resourcemanager.projects.get",
@@ -517,14 +516,28 @@
    "verified": true,
    "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/iam"
   },
-  "roles/iam.roleViewer": {
+  "roles/iam.serviceAccountUser": {
    "permissions": [
-    "iam.roles.get",
-    "iam.roles.list",
-    "iam.roles.listEffectiveTags",
-    "iam.roles.listTagBindings",
+    "iam.serviceAccounts.actAs",
+    "iam.serviceAccounts.get",
+    "iam.serviceAccounts.list",
     "resourcemanager.projects.get",
-    "resourcemanager.projects.getIamPolicy"
+    "resourcemanager.projects.list"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/iam"
+  },
+  "roles/iam.serviceAccountViewer": {
+   "permissions": [
+    "iam.serviceAccountKeys.get",
+    "iam.serviceAccountKeys.list",
+    "iam.serviceAccounts.get",
+    "iam.serviceAccounts.getIamPolicy",
+    "iam.serviceAccounts.list",
+    "iam.serviceAccounts.listEffectiveTags",
+    "iam.serviceAccounts.listTagBindings",
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.list"
    ],
    "verified": true,
    "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/iam"
@@ -537,20 +550,84 @@
    "source": "https://docs.cloud.google.com/iam/docs/understanding-roles#basic",
    "note": "Basic Owner includes all permissions of Editor plus management of roles and billing. Modelled as '*'."
   },
-  "roles/editor": {
+  "roles/resourcemanager.folderIamAdmin": {
    "permissions": [
-    "cloudfunctions.functions.*",
-    "compute.*",
-    "iam.serviceAccounts.actAs",
-    "iam.serviceAccounts.get",
-    "iam.serviceAccounts.list",
-    "resourcemanager.projects.get",
-    "resourcemanager.projects.list",
-    "storage.*"
+    "iam.policybindings.*",
+    "iam.policybindings.get",
+    "iam.policybindings.list",
+    "resourcemanager.folders.createPolicyBinding",
+    "resourcemanager.folders.deletePolicyBinding",
+    "resourcemanager.folders.get",
+    "resourcemanager.folders.getIamPolicy",
+    "resourcemanager.folders.searchPolicyBindings",
+    "resourcemanager.folders.setIamPolicy",
+    "resourcemanager.folders.updatePolicyBinding"
    ],
-   "verified": false,
-   "source": "https://docs.cloud.google.com/iam/docs/understanding-roles#basic",
-   "note": "APPROXIMATION. Basic Editor grants thousands of permissions across all services; only those touching the modelled surface are listed. Do not treat a deny by this entry as evidence Editor lacks a permission."
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
+  },
+  "roles/resourcemanager.folderViewer": {
+   "permissions": [
+    "essentialcontacts.contacts.get",
+    "essentialcontacts.contacts.list",
+    "orgpolicy.constraints.list",
+    "orgpolicy.policies.list",
+    "orgpolicy.policy.get",
+    "resourcemanager.capabilities.get",
+    "resourcemanager.folders.get",
+    "resourcemanager.folders.list",
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.list"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
+  },
+  "roles/resourcemanager.organizationViewer": {
+   "permissions": [
+    "resourcemanager.organizations.get"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
+  },
+  "roles/resourcemanager.projectCreator": {
+   "permissions": [
+    "resourcemanager.organizations.get",
+    "resourcemanager.projects.create"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
+  },
+  "roles/resourcemanager.projectDeleter": {
+   "permissions": [
+    "resourcemanager.projects.delete"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
+  },
+  "roles/resourcemanager.projectIamAdmin": {
+   "permissions": [
+    "iam.policybindings.*",
+    "iam.policybindings.get",
+    "iam.policybindings.list",
+    "resourcemanager.projects.createPolicyBinding",
+    "resourcemanager.projects.deletePolicyBinding",
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.getIamPolicy",
+    "resourcemanager.projects.searchPolicyBindings",
+    "resourcemanager.projects.setIamPolicy",
+    "resourcemanager.projects.updatePolicyBinding"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
+  },
+  "roles/resourcemanager.projectMover": {
+   "permissions": [
+    "resourcemanager.projects.get",
+    "resourcemanager.projects.move",
+    "resourcemanager.projects.update"
+   ],
+   "verified": true,
+   "source": "https://docs.cloud.google.com/iam/docs/roles-permissions/resourcemanager"
   },
   "roles/viewer": {
    "permissions": [

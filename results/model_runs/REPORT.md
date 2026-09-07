@@ -137,3 +137,102 @@ these ten cases test, so grounding the data improves generality for future cases
 and other roles without correcting any published number here. The two GCP cases
 remain invalid because the roles the models proposed are absent from Google's
 reference entirely, which no amount of grounding changes.
+
+---
+
+# Expanded case set — 14 cases, 8 September 2026
+
+GCP was 2 of 10 cases and produced every invalid verdict, so four GCP cases were
+added, each built on roles whose permission lists are in the grounded role data:
+
+| Case | Escalation | Over-permissive role | Reference |
+| :--- | :--- | :--- | :--- |
+| 11 | Service account key creation | `iam.serviceAccountKeyAdmin` | `iam.serviceAccountViewer` |
+| 12 | Token impersonation | `iam.serviceAccountTokenCreator` | `iam.serviceAccountViewer` |
+| 13 | Custom role redefinition | `iam.roleAdmin` | `iam.roleViewer` |
+| 14 | Service account policy self-binding | `iam.serviceAccountAdmin` | `iam.serviceAccountViewer` |
+
+The set is now 8 AWS and 6 GCP. All three Mistral models were re-run in both
+conditions.
+
+| Model | Workload | Correct | Unsafe | Broken | Invalid |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| `ministral-14b-latest` | structured | 7 | 0 | 1 | 6 |
+| `ministral-14b-latest` | prose | 10 | 0 | 0 | 4 |
+| `ministral-8b-latest` | structured | 9 | 0 | 0 | 5 |
+| `ministral-8b-latest` | prose | 7 | 0 | 1 | 6 |
+| `ministral-3b-latest` | structured | 9 | **1** | 0 | 4 |
+| `ministral-3b-latest` | prose | 8 | **1** | 2 | 3 |
+
+**Do not read the correct column as a ranking.** Prose beats structured for the
+14b model and structured beats prose for the 3b and 8b models. Across 14 cases
+those differences are one to three cases wide and the conditions were run once
+each at temperature 0. Nothing here supports ordering these models.
+
+## The first unsafe verdicts, and why case 12 had to be fixed first
+
+The original case 12 denied `getAccessToken`, `signJwt` and
+`implicitDelegation`. In the first pass over the expanded set, models proposed
+`roles/iam.serviceAccountUser` three times and were graded **correct**.
+
+That grade was wrong, and the fault was in the case. `roles/iam.serviceAccountUser`
+grants `iam.serviceAccounts.actAs`, which is an impersonation primitive in its own
+right. A remediation that swaps token minting for `actAs` has not removed the
+caller's ability to act as the target account; it has changed the mechanism. The
+case was denying three named APIs rather than the capability behind them.
+
+`iam.serviceAccounts.actAs` was added to case 12's `must_deny` and the models
+re-run. `ministral-3b` then produced `roles/iam.serviceAccountUser` again, in both
+conditions, and was graded **unsafe** on `iam.serviceAccounts.actAs` — the first
+unsafe verdicts anywhere in this repository.
+
+This is the failure mode that matters most for automated remediation. A
+hallucinated role fails loudly: the policy will not apply. A real, well-formed,
+plausible role that quietly preserves the dangerous capability applies cleanly,
+passes casual review, and leaves the escalation in place.
+
+It is also a caution about the benchmark itself: the case only measured what it
+was told to measure. Every `must_deny` set is a hypothesis about which
+capabilities matter, and a remediation can satisfy all of them while remaining
+unsafe by a route the case never listed.
+
+## What the GCP failures actually look like
+
+Every GCP role proposed across the six runs was collected and checked against the
+grounded role data. Three distinct failure modes appear, and only the third is
+what people usually mean by hallucination:
+
+**1. Permission used as a role.** The most common error by volume:
+`roles/iam.roles.get`, `roles/iam.roles.list`,
+`roles/resourcemanager.projects.get`,
+`roles/resourcemanager.projects.getIamPolicy`,
+`roles/iam.serviceAccounts.get`, `roles/cloudfunctions.functions.list`. The model
+identifies the correct *permission* and then writes it into the role field with a
+`roles/` prefix. The underlying reasoning about least privilege is right; the
+model does not distinguish GCP's permission namespace from its role namespace.
+
+**2. Placeholder instead of an answer.** `roles/custom` three times and
+`customRole` once. The model gestures at defining a custom role without defining
+one.
+
+**3. Invention by pattern completion.** `roles/iam.serviceAccountKeyViewer`,
+proposed five times for case 11. `iam.serviceAccountKeyAdmin` exists and
+`iam.serviceAccountViewer` exists, so a key-viewer role is a natural completion —
+Google simply never created one. The same shape produced
+`roles/resourcemanager.projectViewer` (alongside real `folderViewer` and
+`organizationViewer`) and `roles/resourcemanager.projectIamViewer`.
+
+The models did name real roles correctly where the role is common:
+`iam.serviceAccountViewer` eight times, `iam.roleViewer` twice,
+`cloudfunctions.viewer` once. The failures cluster on the less common corners of
+the namespace, which is where a remediation tool would most need to be right.
+
+## Caveats specific to this run
+
+- Fourteen public cases, one run per condition, temperature 0. No hidden split,
+  no repeats, no statistical claim.
+- Invalid still means unmodelled or non-existent, and still needs a manual check
+  before being called a hallucination.
+- The four new cases were written by the repository author against the same
+  grounded role data the oracle uses, so they inherit its coverage and its blind
+  spots.

@@ -1,16 +1,16 @@
 # Scripted Oracle Self-Test Report
 
-5 hand-written fixtures across 10 cases. No LLM calls or LLM performance results.
+5 hand-written fixtures across 14 cases. No LLM calls or LLM performance results.
 
 The reference check loads the answer key. The mixed fixture also loads it for seven cases. These rows test evaluator behavior only.
 
 | Scripted Fixture | Correct | Unsafe | Broken | Invalid / Unsupported | Safe Rate | Intact Rate |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| `reference_policy_check` | **10** (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 100% | 100% |
-| `unchanged_policy_fixture` | **0** (0%) | 10 (100%) | 0 (0%) | 0 (0%) | 0% | 100% |
-| `deny_all_fixture` | **0** (0%) | 0 (0%) | 10 (100%) | 0 (0%) | 100% | 0% |
-| `mixed_outcome_fixture` | **7** (70%) | 2 (20%) | 1 (10%) | 0 (0%) | 80% | 90% |
-| `malformed_json_fixture` | **0** (0%) | 0 (0%) | 0 (0%) | 10 (100%) | 0% | 0% |
+| `reference_policy_check` | **14** (100%) | 0 (0%) | 0 (0%) | 0 (0%) | 100% | 100% |
+| `unchanged_policy_fixture` | **0** (0%) | 14 (100%) | 0 (0%) | 0 (0%) | 0% | 100% |
+| `deny_all_fixture` | **0** (0%) | 0 (0%) | 14 (100%) | 0 (0%) | 100% | 0% |
+| `mixed_outcome_fixture` | **11** (79%) | 2 (14%) | 1 (7%) | 0 (0%) | 86% | 93% |
+| `malformed_json_fixture` | **0** (0%) | 0 (0%) | 0 (0%) | 14 (100%) | 0% | 0% |
 
 ### Verdict Definitions
 

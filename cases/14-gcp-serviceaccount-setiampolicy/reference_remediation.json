@@ -1,0 +1,10 @@
+{
+  "bindings": [
+    {
+      "role": "roles/iam.serviceAccountViewer",
+      "members": [
+        "user:sa-operator@example.com"
+      ]
+    }
+  ]
+}

@@ -198,5 +198,85 @@
       "fixture": "reference_policy_check",
       "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/viewer\",\n      \"members\": [\n        \"serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}"
     }
+  },
+  {
+    "case_id": "11-gcp-serviceaccountkey-create",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 2,
+      "passed_must_allow": 4
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/iam.serviceAccountViewer\",\n      \"members\": [\n        \"serviceAccount:key-auditor@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}\n"
+    }
+  },
+  {
+    "case_id": "12-gcp-serviceaccount-accesstoken",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 4,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/iam.serviceAccountViewer\",\n      \"members\": [\n        \"serviceAccount:inventory-reporter@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}\n"
+    }
+  },
+  {
+    "case_id": "13-gcp-role-update",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 3,
+      "passed_must_allow": 4
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/iam.roleViewer\",\n      \"members\": [\n        \"user:platform-reviewer@example.com\"\n      ]\n    }\n  ]\n}\n"
+    }
+  },
+  {
+    "case_id": "14-gcp-serviceaccount-setiampolicy",
+    "verdict": "correct",
+    "is_safe": true,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 0,
+      "passed_must_deny": 3,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "reference_policy_check",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/iam.serviceAccountViewer\",\n      \"members\": [\n        \"user:sa-operator@example.com\"\n      ]\n    }\n  ]\n}\n"
+    }
   }
 ]

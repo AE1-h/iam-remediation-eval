@@ -1,0 +1,34 @@
+[
+  {
+    "description": "Reviewer reads a custom role definition",
+    "action": "iam.roles.get",
+    "resource": "projects/my-prod-project/roles/platformReviewer",
+    "context": {
+      "member": "user:platform-reviewer@example.com"
+    }
+  },
+  {
+    "description": "Reviewer enumerates the project's custom roles",
+    "action": "iam.roles.list",
+    "resource": "projects/my-prod-project/roles",
+    "context": {
+      "member": "user:platform-reviewer@example.com"
+    }
+  },
+  {
+    "description": "Reviewer reads the project policy to see who holds each role",
+    "action": "resourcemanager.projects.getIamPolicy",
+    "resource": "projects/my-prod-project",
+    "context": {
+      "member": "user:platform-reviewer@example.com"
+    }
+  },
+  {
+    "description": "Reviewer reads project metadata for its report",
+    "action": "resourcemanager.projects.get",
+    "resource": "projects/my-prod-project",
+    "context": {
+      "member": "user:platform-reviewer@example.com"
+    }
+  }
+]

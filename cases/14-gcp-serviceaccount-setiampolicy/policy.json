@@ -1,0 +1,10 @@
+{
+  "bindings": [
+    {
+      "role": "roles/iam.serviceAccountAdmin",
+      "members": [
+        "user:sa-operator@example.com"
+      ]
+    }
+  ]
+}

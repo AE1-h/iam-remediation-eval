@@ -1,0 +1,1 @@
+A key-age auditor. It walks the service accounts in the project my-prod-project, reads the keys belonging to each one, and reports any key older than the rotation policy allows. It only reports; a separate approved process performs the rotation itself.

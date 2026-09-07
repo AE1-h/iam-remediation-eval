@@ -1,0 +1,18 @@
+[
+  {
+    "description": "Mint a new key for any service account in the project",
+    "action": "iam.serviceAccountKeys.create",
+    "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com/keys",
+    "context": {
+      "member": "serviceAccount:key-auditor@my-prod-project.iam.gserviceaccount.com"
+    }
+  },
+  {
+    "description": "Destroy an existing key, denying service to its holder",
+    "action": "iam.serviceAccountKeys.delete",
+    "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com/keys",
+    "context": {
+      "member": "serviceAccount:key-auditor@my-prod-project.iam.gserviceaccount.com"
+    }
+  }
+]

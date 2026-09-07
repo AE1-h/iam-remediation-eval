@@ -1,0 +1,1 @@
+A quarterly permissions reviewer for the project my-prod-project. It reads each custom role defined in the project, records which permissions that role contains, and reads the project's IAM policy to record which principals hold it. It produces a report and changes nothing.

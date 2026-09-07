@@ -2,9 +2,9 @@
 """
 Master repository validator.
 Recomputes and asserts every verifiable claim in the repository:
-1. Validates directory structure and required files across all 10 cases.
-2. Verifies that all 10 initial policies evaluate to UNSAFE.
-3. Verifies that all 10 reference remediations evaluate to CORRECT.
+1. Validates directory structure and required files across every case.
+2. Verifies that every initial policy evaluates to UNSAFE.
+3. Verifies that every reference remediation evaluates to CORRECT.
 4. Executes the mutation testing suite and verifies 100% mutant kill rate.
 5. Recomputes benchmark baseline figures and asserts zero drift.
 """
@@ -40,7 +40,7 @@ def main():
 
     cases_dir = REPO_ROOT / "cases"
     case_dirs = [p for p in sorted(cases_dir.iterdir()) if p.is_dir()]
-    check("Exactly 10 benchmark test cases present", len(case_dirs) == 10, f"Found {len(case_dirs)}")
+    check("At least one benchmark test case present", len(case_dirs) >= 1, f"Found {len(case_dirs)}")
 
     oracle = DeterministicOracle()
 

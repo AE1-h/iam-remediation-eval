@@ -1,0 +1,18 @@
+[
+  {
+    "description": "Reporter enumerates the service accounts in the project",
+    "action": "iam.serviceAccounts.list",
+    "resource": "projects/my-prod-project/serviceAccounts",
+    "context": {
+      "member": "serviceAccount:inventory-reporter@my-prod-project.iam.gserviceaccount.com"
+    }
+  },
+  {
+    "description": "Reporter reads service account metadata for its inventory",
+    "action": "iam.serviceAccounts.get",
+    "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "serviceAccount:inventory-reporter@my-prod-project.iam.gserviceaccount.com"
+    }
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "bindings": [
+    {
+      "role": "roles/iam.serviceAccountTokenCreator",
+      "members": [
+        "serviceAccount:inventory-reporter@my-prod-project.iam.gserviceaccount.com"
+      ]
+    }
+  ]
+}

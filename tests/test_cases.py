@@ -20,8 +20,10 @@ class TestBenchmarkCases(unittest.TestCase):
         cls.oracle = DeterministicOracle()
         cls.case_dirs = [p for p in sorted(cls.cases_dir.iterdir()) if p.is_dir()]
 
-    def test_exactly_ten_cases_exist(self):
-        self.assertEqual(len(self.case_dirs), 10, f"Expected 10 cases, found {len(self.case_dirs)}")
+    def test_cases_exist(self):
+        # Deliberately not a fixed count. Cases are added over time; the
+        # invariants that matter are asserted per case by the tests below.
+        self.assertGreaterEqual(len(self.case_dirs), 1, "No benchmark cases found")
 
     def test_case_file_structure(self):
         required_files = ["policy.json", "must_deny.json", "must_allow.json", "NOTES.md", "reference_remediation.json"]

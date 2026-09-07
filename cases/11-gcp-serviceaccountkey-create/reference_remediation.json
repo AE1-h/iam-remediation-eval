@@ -1,0 +1,10 @@
+{
+  "bindings": [
+    {
+      "role": "roles/iam.serviceAccountViewer",
+      "members": [
+        "serviceAccount:key-auditor@my-prod-project.iam.gserviceaccount.com"
+      ]
+    }
+  ]
+}

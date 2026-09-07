@@ -1,0 +1,34 @@
+[
+  {
+    "description": "Auditor enumerates keys to find ones past their rotation age",
+    "action": "iam.serviceAccountKeys.list",
+    "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com/keys",
+    "context": {
+      "member": "serviceAccount:key-auditor@my-prod-project.iam.gserviceaccount.com"
+    }
+  },
+  {
+    "description": "Auditor reads key metadata to determine creation date",
+    "action": "iam.serviceAccountKeys.get",
+    "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com/keys",
+    "context": {
+      "member": "serviceAccount:key-auditor@my-prod-project.iam.gserviceaccount.com"
+    }
+  },
+  {
+    "description": "Auditor enumerates the service accounts to audit",
+    "action": "iam.serviceAccounts.list",
+    "resource": "projects/my-prod-project/serviceAccounts",
+    "context": {
+      "member": "serviceAccount:key-auditor@my-prod-project.iam.gserviceaccount.com"
+    }
+  },
+  {
+    "description": "Auditor reads service account metadata",
+    "action": "iam.serviceAccounts.get",
+    "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "serviceAccount:key-auditor@my-prod-project.iam.gserviceaccount.com"
+    }
+  }
+]

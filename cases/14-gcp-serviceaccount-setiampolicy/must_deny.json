@@ -1,0 +1,26 @@
+[
+  {
+    "description": "Bind any principal, including the caller, to a service account",
+    "action": "iam.serviceAccounts.setIamPolicy",
+    "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "user:sa-operator@example.com"
+    }
+  },
+  {
+    "description": "Create a new service account",
+    "action": "iam.serviceAccounts.create",
+    "resource": "projects/my-prod-project/serviceAccounts",
+    "context": {
+      "member": "user:sa-operator@example.com"
+    }
+  },
+  {
+    "description": "Delete an existing service account",
+    "action": "iam.serviceAccounts.delete",
+    "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+    "context": {
+      "member": "user:sa-operator@example.com"
+    }
+  }
+]

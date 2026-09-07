@@ -344,5 +344,177 @@
       "fixture": "unchanged_policy_fixture",
       "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/resourcemanager.projectIamAdmin\",\n      \"members\": [\n        \"serviceAccount:compliance-scanner@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}"
     }
+  },
+  {
+    "case_id": "11-gcp-serviceaccountkey-create",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 2,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 4
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam.serviceAccountKeys.create",
+        "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com/keys",
+        "allowed": true,
+        "description": "Mint a new key for any service account in the project",
+        "matched_statement": "roles/iam.serviceAccountKeyAdmin",
+        "reason": "Allowed by GCP role 'roles/iam.serviceAccountKeyAdmin'"
+      },
+      {
+        "action": "iam.serviceAccountKeys.delete",
+        "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com/keys",
+        "allowed": true,
+        "description": "Destroy an existing key, denying service to its holder",
+        "matched_statement": "roles/iam.serviceAccountKeyAdmin",
+        "reason": "Allowed by GCP role 'roles/iam.serviceAccountKeyAdmin'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "unchanged_policy_fixture",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/iam.serviceAccountKeyAdmin\",\n      \"members\": [\n        \"serviceAccount:key-auditor@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "12-gcp-serviceaccount-accesstoken",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 3,
+      "broken_violations": 0,
+      "passed_must_deny": 1,
+      "passed_must_allow": 2
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam.serviceAccounts.getAccessToken",
+        "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com",
+        "allowed": true,
+        "description": "Mint a short-lived OAuth token for another service account",
+        "matched_statement": "roles/iam.serviceAccountTokenCreator",
+        "reason": "Allowed by GCP role 'roles/iam.serviceAccountTokenCreator'"
+      },
+      {
+        "action": "iam.serviceAccounts.signJwt",
+        "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com",
+        "allowed": true,
+        "description": "Sign a JWT as another service account to obtain its identity",
+        "matched_statement": "roles/iam.serviceAccountTokenCreator",
+        "reason": "Allowed by GCP role 'roles/iam.serviceAccountTokenCreator'"
+      },
+      {
+        "action": "iam.serviceAccounts.implicitDelegation",
+        "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com",
+        "allowed": true,
+        "description": "Chain delegation through another service account",
+        "matched_statement": "roles/iam.serviceAccountTokenCreator",
+        "reason": "Allowed by GCP role 'roles/iam.serviceAccountTokenCreator'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "unchanged_policy_fixture",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/iam.serviceAccountTokenCreator\",\n      \"members\": [\n        \"serviceAccount:inventory-reporter@my-prod-project.iam.gserviceaccount.com\"\n      ]\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "13-gcp-role-update",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 3,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 4
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam.roles.update",
+        "resource": "projects/my-prod-project/roles/platformReviewer",
+        "allowed": true,
+        "description": "Add permissions to a custom role the caller already holds",
+        "matched_statement": "roles/iam.roleAdmin",
+        "reason": "Allowed by GCP role 'roles/iam.roleAdmin'"
+      },
+      {
+        "action": "iam.roles.create",
+        "resource": "projects/my-prod-project/roles",
+        "allowed": true,
+        "description": "Define a new custom role with arbitrary permissions",
+        "matched_statement": "roles/iam.roleAdmin",
+        "reason": "Allowed by GCP role 'roles/iam.roleAdmin'"
+      },
+      {
+        "action": "iam.roles.delete",
+        "resource": "projects/my-prod-project/roles/platformReviewer",
+        "allowed": true,
+        "description": "Remove a custom role that other principals depend on",
+        "matched_statement": "roles/iam.roleAdmin",
+        "reason": "Allowed by GCP role 'roles/iam.roleAdmin'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "unchanged_policy_fixture",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/iam.roleAdmin\",\n      \"members\": [\n        \"user:platform-reviewer@example.com\"\n      ]\n    }\n  ]\n}"
+    }
+  },
+  {
+    "case_id": "14-gcp-serviceaccount-setiampolicy",
+    "verdict": "unsafe",
+    "is_safe": false,
+    "is_intact": true,
+    "counts": {
+      "unsafe_violations": 3,
+      "broken_violations": 0,
+      "passed_must_deny": 0,
+      "passed_must_allow": 3
+    },
+    "unsafe_violations": [
+      {
+        "action": "iam.serviceAccounts.setIamPolicy",
+        "resource": "projects/my-prod-project/serviceAccounts/deploy-admin@my-prod-project.iam.gserviceaccount.com",
+        "allowed": true,
+        "description": "Bind any principal, including the caller, to a service account",
+        "matched_statement": "roles/iam.serviceAccountAdmin",
+        "reason": "Allowed by GCP role 'roles/iam.serviceAccountAdmin'"
+      },
+      {
+        "action": "iam.serviceAccounts.create",
+        "resource": "projects/my-prod-project/serviceAccounts",
+        "allowed": true,
+        "description": "Create a new service account",
+        "matched_statement": "roles/iam.serviceAccountAdmin",
+        "reason": "Allowed by GCP role 'roles/iam.serviceAccountAdmin'"
+      },
+      {
+        "action": "iam.serviceAccounts.delete",
+        "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+        "allowed": true,
+        "description": "Delete an existing service account",
+        "matched_statement": "roles/iam.serviceAccountAdmin",
+        "reason": "Allowed by GCP role 'roles/iam.serviceAccountAdmin'"
+      }
+    ],
+    "broken_violations": [],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "unchanged_policy_fixture",
+      "proposed_policy": "{\n  \"bindings\": [\n    {\n      \"role\": \"roles/iam.serviceAccountAdmin\",\n      \"members\": [\n        \"user:sa-operator@example.com\"\n      ]\n    }\n  ]\n}"
+    }
   }
 ]

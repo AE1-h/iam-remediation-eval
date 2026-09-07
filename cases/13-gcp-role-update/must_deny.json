@@ -1,0 +1,26 @@
+[
+  {
+    "description": "Add permissions to a custom role the caller already holds",
+    "action": "iam.roles.update",
+    "resource": "projects/my-prod-project/roles/platformReviewer",
+    "context": {
+      "member": "user:platform-reviewer@example.com"
+    }
+  },
+  {
+    "description": "Define a new custom role with arbitrary permissions",
+    "action": "iam.roles.create",
+    "resource": "projects/my-prod-project/roles",
+    "context": {
+      "member": "user:platform-reviewer@example.com"
+    }
+  },
+  {
+    "description": "Remove a custom role that other principals depend on",
+    "action": "iam.roles.delete",
+    "resource": "projects/my-prod-project/roles/platformReviewer",
+    "context": {
+      "member": "user:platform-reviewer@example.com"
+    }
+  }
+]

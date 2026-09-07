@@ -416,5 +416,193 @@
       "fixture": "deny_all_fixture",
       "proposed_policy": "{\n  \"bindings\": []\n}"
     }
+  },
+  {
+    "case_id": "11-gcp-serviceaccountkey-create",
+    "verdict": "broken",
+    "is_safe": true,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 4,
+      "passed_must_deny": 2,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [
+      {
+        "action": "iam.serviceAccountKeys.list",
+        "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com/keys",
+        "allowed": false,
+        "description": "Auditor enumerates keys to find ones past their rotation age",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      },
+      {
+        "action": "iam.serviceAccountKeys.get",
+        "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com/keys",
+        "allowed": false,
+        "description": "Auditor reads key metadata to determine creation date",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      },
+      {
+        "action": "iam.serviceAccounts.list",
+        "resource": "projects/my-prod-project/serviceAccounts",
+        "allowed": false,
+        "description": "Auditor enumerates the service accounts to audit",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      },
+      {
+        "action": "iam.serviceAccounts.get",
+        "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+        "allowed": false,
+        "description": "Auditor reads service account metadata",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      }
+    ],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"bindings\": []\n}"
+    }
+  },
+  {
+    "case_id": "12-gcp-serviceaccount-accesstoken",
+    "verdict": "broken",
+    "is_safe": true,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 2,
+      "passed_must_deny": 4,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [
+      {
+        "action": "iam.serviceAccounts.list",
+        "resource": "projects/my-prod-project/serviceAccounts",
+        "allowed": false,
+        "description": "Reporter enumerates the service accounts in the project",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      },
+      {
+        "action": "iam.serviceAccounts.get",
+        "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+        "allowed": false,
+        "description": "Reporter reads service account metadata for its inventory",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      }
+    ],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"bindings\": []\n}"
+    }
+  },
+  {
+    "case_id": "13-gcp-role-update",
+    "verdict": "broken",
+    "is_safe": true,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 4,
+      "passed_must_deny": 3,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [
+      {
+        "action": "iam.roles.get",
+        "resource": "projects/my-prod-project/roles/platformReviewer",
+        "allowed": false,
+        "description": "Reviewer reads a custom role definition",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      },
+      {
+        "action": "iam.roles.list",
+        "resource": "projects/my-prod-project/roles",
+        "allowed": false,
+        "description": "Reviewer enumerates the project's custom roles",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      },
+      {
+        "action": "resourcemanager.projects.getIamPolicy",
+        "resource": "projects/my-prod-project",
+        "allowed": false,
+        "description": "Reviewer reads the project policy to see who holds each role",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      },
+      {
+        "action": "resourcemanager.projects.get",
+        "resource": "projects/my-prod-project",
+        "allowed": false,
+        "description": "Reviewer reads project metadata for its report",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      }
+    ],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"bindings\": []\n}"
+    }
+  },
+  {
+    "case_id": "14-gcp-serviceaccount-setiampolicy",
+    "verdict": "broken",
+    "is_safe": true,
+    "is_intact": false,
+    "counts": {
+      "unsafe_violations": 0,
+      "broken_violations": 3,
+      "passed_must_deny": 3,
+      "passed_must_allow": 0
+    },
+    "unsafe_violations": [],
+    "broken_violations": [
+      {
+        "action": "iam.serviceAccounts.list",
+        "resource": "projects/my-prod-project/serviceAccounts",
+        "allowed": false,
+        "description": "Operator enumerates service accounts for the ownership report",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      },
+      {
+        "action": "iam.serviceAccounts.get",
+        "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+        "allowed": false,
+        "description": "Operator reads service account metadata",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      },
+      {
+        "action": "iam.serviceAccounts.getIamPolicy",
+        "resource": "projects/my-prod-project/serviceAccounts/app-runner@my-prod-project.iam.gserviceaccount.com",
+        "allowed": false,
+        "description": "Operator reads the bindings on each service account",
+        "matched_statement": null,
+        "reason": "GCP implicit deny: no role binding permits this action"
+      }
+    ],
+    "error_message": null,
+    "metadata": {
+      "source_kind": "scripted_self_test",
+      "fixture": "deny_all_fixture",
+      "proposed_policy": "{\n  \"bindings\": []\n}"
+    }
   }
 ]

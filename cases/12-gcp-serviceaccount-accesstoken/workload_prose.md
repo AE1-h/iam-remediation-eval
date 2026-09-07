@@ -1,0 +1,1 @@
+An inventory reporter for the project my-prod-project. It produces a weekly list of the service accounts that exist in the project and their descriptions. It reads only; it never acts as any of those accounts.

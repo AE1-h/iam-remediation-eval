@@ -1,5 +1,6 @@
 import copy
 import json
+import pathlib
 import subprocess
 import sys
 import tempfile
@@ -11,6 +12,9 @@ from runner.external_model import build_request, invoke, request_digest
 from runner.evaluate_batch import run_all_benchmarks
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+CASE_COUNT = len([p for p in (pathlib.Path(__file__).resolve().parent.parent / "cases").iterdir() if p.is_dir()])
 
 
 class RunnerTests(unittest.TestCase):
@@ -42,7 +46,7 @@ class RunnerTests(unittest.TestCase):
         report = run_all_benchmarks(ROOT)
         self.assertEqual(report["metadata"]["llm_calls"], 0)
         for data in report["agents"].values():
-            self.assertEqual(sum(data["matrix_counts"].values()), 10)
+            self.assertEqual(sum(data["matrix_counts"].values()), CASE_COUNT)
             for result in data["per_case"]:
                 self.assertIn("proposed_policy", result["metadata"])
 
@@ -55,7 +59,7 @@ class RunnerTests(unittest.TestCase):
             result = subprocess.run(command, capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             records = (output / "records.jsonl").read_text()
-            self.assertEqual(len(records.splitlines()), 10)
+            self.assertEqual(len(records.splitlines()), CASE_COUNT)
             self.assertEqual(json.loads(records.splitlines()[0])["raw_output"], "{}\n")
             metadata = json.loads((output / "metadata.json").read_text())
             self.assertEqual(metadata["status"], "complete")
@@ -74,6 +78,6 @@ class RunnerTests(unittest.TestCase):
             self.assertEqual(result.returncode, 1, result.stderr)
             metadata = json.loads((output / "metadata.json").read_text())
             self.assertEqual(metadata["status"], "incomplete")
-            self.assertEqual(metadata["execution_failures"], 10)
+            self.assertEqual(metadata["execution_failures"], CASE_COUNT)
             for line in (output / "records.jsonl").read_text().splitlines():
                 self.assertNotIn("evaluation", json.loads(line))
